@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, MessageCircle, NotebookPen } from 'lucide-react';
+import { FileText, MessageCircle, NotebookPen, Headphones } from 'lucide-react';
 import SourcesSidebar from './SourcesSidebar';
 import ChatArea from './ChatArea';
 import StudioSidebar from './StudioSidebar';
@@ -35,7 +34,7 @@ const MobileNotebookTabs = ({
 }: MobileNotebookTabsProps) => {
   return (
     <Tabs defaultValue="chat" className="flex-1 flex flex-col overflow-hidden">
-      <TabsList className="grid w-full grid-cols-3 bg-gray-100 p-1 h-12 rounded-none border-b border-gray-200">
+      <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 h-12 rounded-none border-b border-gray-200">
         <TabsTrigger 
           value="sources" 
           className="flex items-center space-x-2 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"
@@ -51,7 +50,14 @@ const MobileNotebookTabs = ({
           <span className="hidden sm:inline">Chat</span>
         </TabsTrigger>
         <TabsTrigger 
-          value="studio" 
+          value="podcast" 
+          className="flex items-center space-x-2 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"
+        >
+          <Headphones className="h-4 w-4" />
+          <span className="hidden sm:inline">Podcast</span>
+        </TabsTrigger>
+        <TabsTrigger 
+          value="notes" 
           className="flex items-center space-x-2 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"
         >
           <NotebookPen className="h-4 w-4" />
@@ -78,11 +84,26 @@ const MobileNotebookTabs = ({
         />
       </TabsContent>
 
-      <TabsContent value="studio" className="flex-1 overflow-hidden mt-0">
-        <StudioSidebar 
-          notebookId={notebookId}
-          onCitationClick={onCitationClick}
-        />
+      <TabsContent value="podcast" className="flex-1 overflow-hidden mt-0">
+        <div className="h-full bg-gray-50 p-4">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Audio Overview</h3>
+          <StudioSidebar 
+            notebookId={notebookId}
+            onCitationClick={onCitationClick}
+            showOnlyAudio={true}
+          />
+        </div>
+      </TabsContent>
+
+      <TabsContent value="notes" className="flex-1 overflow-hidden mt-0">
+        <div className="h-full bg-gray-50 p-4">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Notes</h3>
+          <StudioSidebar 
+            notebookId={notebookId}
+            onCitationClick={onCitationClick}
+            showOnlyNotes={true}
+          />
+        </div>
       </TabsContent>
     </Tabs>
   );

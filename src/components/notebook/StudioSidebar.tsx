@@ -16,12 +16,16 @@ interface StudioSidebarProps {
   notebookId?: string;
   isExpanded?: boolean;
   onCitationClick?: (citation: Citation) => void;
+  showOnlyAudio?: boolean;
+  showOnlyNotes?: boolean;
 }
 
 const StudioSidebar = ({
   notebookId,
   isExpanded,
-  onCitationClick
+  onCitationClick,
+  showOnlyAudio = false,
+  showOnlyNotes = false
 }: StudioSidebarProps) => {
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isCreatingNote, setIsCreatingNote] = useState(false);
@@ -209,23 +213,29 @@ const StudioSidebar = ({
     return contentToUse.length > 100 ? contentToUse.substring(0, 100) + '...' : contentToUse;
   };
 
-  if (isEditingMode) {
-    return <div className="w-full bg-gray-50 border-l border-gray-200 flex flex-col h-full overflow-hidden">
-        <NoteEditor note={editingNote || undefined} onSave={handleSaveNote} onDelete={editingNote ? handleDeleteNote : undefined} onCancel={handleCancel} isLoading={isCreating || isUpdating || isDeleting} onCitationClick={onCitationClick} />
-      </div>;
+  // If we're in editing mode and showing only notes, show the editor
+  if (isEditingMode && showOnlyNotes) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden">
+        <NoteEditor 
+          note={editingNote || undefined} 
+          onSave={handleSaveNote} 
+          onDelete={editingNote ? handleDeleteNote : undefined} 
+          onCancel={handleCancel} 
+          isLoading={isCreating || isUpdating || isDeleting} 
+          onCitationClick={onCitationClick} 
+        />
+      </div>
+    );
   }
 
-  return <div className="w-full bg-gray-50 border-l border-gray-200 flex flex-col h-full overflow-hidden">
-      <div className="p-4 border-b border-gray-200 flex-shrink-0">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Studio</h2>
-        
-        {/* Audio Overview */}
-        <Card className="p-4 mb-4 border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-medium text-gray-900">Audio Overview</h3>
-          </div>
-
-          {hasValidAudio && !audioError && currentStatus !== 'generating' && !isAutoRefreshing ? <AudioPlayer 
+  // Show only audio section
+  if (showOnlyAudio) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-auto">
+          {hasValidAudio && !audioError && currentStatus !== 'generating' && !isAutoRefreshing ? (
+            <AudioPlayer 
               audioUrl={notebook.audio_overview_url} 
               title="Deep Dive Conversation" 
               notebookId={notebookId} 
@@ -234,9 +244,12 @@ const StudioSidebar = ({
               onRetry={handleAudioRetry} 
               onDeleted={handleAudioDeleted}
               onUrlRefresh={handleUrlRefresh}
-            /> : <Card className="p-3 border border-gray-200">
+            />
+          ) : (
+            <Card className="p-4 border border-gray-200">
               {/* Hide this div when generating or auto-refreshing */}
-              {currentStatus !== 'generating' && !isGenerating && !isAutoRefreshing && <div className="flex items-center space-x-3 mb-3">
+              {currentStatus !== 'generating' && !isGenerating && !isAutoRefreshing && (
+                <div className="flex items-center space-x-3 mb-3">
                   <div className="w-8 h-8 rounded flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#111827">
                       <path d="M280-120v-123q-104-14-172-93T40-520h80q0 83 58.5 141.5T320-320h10q5 0 10-1 13 20 28 37.5t32 32.5q-10 3-19.5 4.5T360-243v123h-80Zm20-282q-43-8-71.5-40.5T200-520v-240q0-50 35-85t85-35q50 0 85 35t35 85v160H280v80q0 31 5 60.5t15 57.5Zm340 2q-50 0-85-35t-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm-40 280v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T640-320q83 0 141.5-58.5T840-520h80q0 105-68 184t-172 93v123h-80Zm40-360q17 0 28.5-11.5T680-520v-240q0-17-11.5-28.5T640-800q-17 0-28.5 11.5T600-760v240q0 17 11.5 28.5T640-480Zm0-160Z" />
@@ -246,19 +259,23 @@ const StudioSidebar = ({
                     <h4 className="font-medium text-gray-900">Deep Dive conversation</h4>
                     <p className="text-sm text-gray-600">Two hosts</p>
                   </div>
-                </div>}
+                </div>
+              )}
               
               {/* Status Display */}
-              {getStatusDisplay() && <div className="flex items-center space-x-2 mb-3 p-2 rounded-md bg-transparent">
+              {getStatusDisplay() && (
+                <div className="flex items-center space-x-2 mb-3 p-2 rounded-md bg-transparent">
                   {getStatusDisplay()!.icon}
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-900">{getStatusDisplay()!.text}</p>
                     <p className="text-xs text-slate-900">{getStatusDisplay()!.description}</p>
                   </div>
-                </div>}
+                </div>
+              )}
               
               {/* Audio error div */}
-              {audioError && <div className="flex items-center space-x-2 mb-3 p-2 bg-red-50 rounded-md">
+              {audioError && (
+                <div className="flex items-center space-x-2 mb-3 p-2 bg-red-50 rounded-md">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <div className="flex-1">
                     <p className="text-sm text-red-600">Audio unavailable</p>
@@ -267,44 +284,61 @@ const StudioSidebar = ({
                     <RefreshCw className="h-4 w-4 mr-1" />
                     Retry
                   </Button>
-                </div>}
+                </div>
+              )}
               
               <div className="flex space-x-2">
-                <Button size="sm" onClick={handleGenerateAudio} disabled={isGenerating || currentStatus === 'generating' || !hasProcessedSource || isAutoRefreshing} className="flex-1 text-white bg-slate-900 hover:bg-slate-800">
-                  {isGenerating || currentStatus === 'generating' ? <>
+                <Button 
+                  size="sm" 
+                  onClick={handleGenerateAudio} 
+                  disabled={isGenerating || currentStatus === 'generating' || !hasProcessedSource || isAutoRefreshing} 
+                  className="flex-1 text-white bg-slate-900 hover:bg-slate-800"
+                >
+                  {isGenerating || currentStatus === 'generating' ? (
+                    <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       Generating...
-                    </> : 'Generate'}
+                    </>
+                  ) : (
+                    'Generate'
+                  )}
                 </Button>
               </div>
-            </Card>}
-        </Card>
+            </Card>
+          )}
+        </div>
+      </div>
+    );
+  }
 
-        {/* Notes Section */}
+  // Show only notes section
+  if (showOnlyNotes) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden">
         <div className="mb-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-medium text-gray-900">Notes</h3>
-            
-          </div>
-          
-          <Button variant="outline" size="sm" className="w-full mb-4" onClick={handleCreateNote}>
+          <Button variant="outline" size="sm" className="w-full" onClick={handleCreateNote}>
             <Plus className="h-4 w-4 mr-2" />
             Add note
           </Button>
         </div>
-      </div>
 
-      {/* Saved Notes Area */}
-      <ScrollArea className="flex-1 h-full">
-        <div className="p-4">
-          {isLoading ? <div className="text-center py-8">
-              <p className="text-sm text-gray-600">Loading notes...</p>
-            </div> : notes && notes.length > 0 ? <div className="space-y-3">
-              {notes.map(note => <Card key={note.id} className="p-3 border border-gray-200 hover:bg-gray-50 cursor-pointer" onClick={() => handleEditNote(note)}>
+        <ScrollArea className="flex-1">
+          <div className="space-y-3">
+            {isLoading ? (
+              <div className="text-center py-8">
+                <p className="text-sm text-gray-600">Loading notes...</p>
+              </div>
+            ) : notes && notes.length > 0 ? (
+              notes.map(note => (
+                <Card key={note.id} className="p-3 border border-gray-200 hover:bg-gray-50 cursor-pointer" onClick={() => handleEditNote(note)}>
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-2 mb-1">
-                        {note.source_type === 'ai_response' ? <Bot className="h-3 w-3 text-blue-600" /> : <User className="h-3 w-3 text-gray-600" />}
+                        {note.source_type === 'ai_response' ? (
+                          <Bot className="h-3 w-3 text-blue-600" />
+                        ) : (
+                          <User className="h-3 w-3 text-gray-600" />
+                        )}
                         <span className="text-xs text-gray-500 uppercase">
                           {note.source_type === 'ai_response' ? 'AI Response' : 'Note'}
                         </span>
@@ -317,12 +351,172 @@ const StudioSidebar = ({
                         {new Date(note.updated_at).toLocaleDateString()}
                       </p>
                     </div>
-                    {note.source_type === 'user' && <Button variant="ghost" size="sm" className="ml-2">
+                    {note.source_type === 'user' && (
+                      <Button variant="ghost" size="sm" className="ml-2">
                         <Edit className="h-3 w-3" />
-                      </Button>}
+                      </Button>
+                    )}
                   </div>
-                </Card>)}
-            </div> : <div className="text-center py-8">
+                </Card>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-gray-400 text-2xl">📄</span>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Saved notes will appear here</h3>
+                <p className="text-sm text-gray-600">
+                  Save a chat message to create a new note, or click Add note above.
+                </p>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+    );
+  }
+
+  // Default full sidebar (when not split)
+  return (
+    <div className="w-full bg-gray-50 border-l border-gray-200 flex flex-col h-full overflow-hidden">
+      <div className="p-4 border-b border-gray-200 flex-shrink-0">
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Studio</h2>
+        
+        {/* Audio Overview */}
+        <Card className="p-4 mb-4 border border-gray-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-gray-900">Audio Overview</h3>
+          </div>
+
+          {hasValidAudio && !audioError && currentStatus !== 'generating' && !isAutoRefreshing ? (
+            <AudioPlayer 
+              audioUrl={notebook.audio_overview_url} 
+              title="Deep Dive Conversation" 
+              notebookId={notebookId} 
+              expiresAt={notebook.audio_url_expires_at} 
+              onError={handleAudioError} 
+              onRetry={handleAudioRetry} 
+              onDeleted={handleAudioDeleted}
+              onUrlRefresh={handleUrlRefresh}
+            />
+          ) : (
+            <Card className="p-3 border border-gray-200">
+              {/* Hide this div when generating or auto-refreshing */}
+              {currentStatus !== 'generating' && !isGenerating && !isAutoRefreshing && (
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-8 h-8 rounded flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#111827">
+                      <path d="M280-120v-123q-104-14-172-93T40-520h80q0 83 58.5 141.5T320-320h10q5 0 10-1 13 20 28 37.5t32 32.5q-10 3-19.5 4.5T360-243v123h-80Zm20-282q-43-8-71.5-40.5T200-520v-240q0-50 35-85t85-35q50 0 85 35t35 85v160H280v80q0 31 5 60.5t15 57.5Zm340 2q-50 0-85-35t-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm-40 280v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T640-320q83 0 141.5-58.5T840-520h80q0 105-68 184t-172 93v123h-80Zm40-360q17 0 28.5-11.5T680-520v-240q0-17-11.5-28.5T640-800q-17 0-28.5 11.5T600-760v240q0 17 11.5 28.5T640-480Zm0-160Z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-gray-900">Deep Dive conversation</h4>
+                    <p className="text-sm text-gray-600">Two hosts</p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Status Display */}
+              {getStatusDisplay() && (
+                <div className="flex items-center space-x-2 mb-3 p-2 rounded-md bg-transparent">
+                  {getStatusDisplay()!.icon}
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-slate-900">{getStatusDisplay()!.text}</p>
+                    <p className="text-xs text-slate-900">{getStatusDisplay()!.description}</p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Audio error div */}
+              {audioError && (
+                <div className="flex items-center space-x-2 mb-3 p-2 bg-red-50 rounded-md">
+                  <AlertCircle className="h-4 w-4 text-red-600" />
+                  <div className="flex-1">
+                    <p className="text-sm text-red-600">Audio unavailable</p>
+                  </div>
+                  <Button size="sm" variant="outline" onClick={handleAudioRetry} className="text-red-600 border-red-300 hover:bg-red-50">
+                    <RefreshCw className="h-4 w-4 mr-1" />
+                    Retry
+                  </Button>
+                </div>
+              )}
+              
+              <div className="flex space-x-2">
+                <Button 
+                  size="sm" 
+                  onClick={handleGenerateAudio} 
+                  disabled={isGenerating || currentStatus === 'generating' || !hasProcessedSource || isAutoRefreshing} 
+                  className="flex-1 text-white bg-slate-900 hover:bg-slate-800"
+                >
+                  {isGenerating || currentStatus === 'generating' ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    'Generate'
+                  )}
+                </Button>
+              </div>
+            </Card>
+          )}
+        </Card>
+
+        {/* Notes Section */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-medium text-gray-900">Notes</h3>
+          </div>
+          
+          <Button variant="outline" size="sm" className="w-full mb-4" onClick={handleCreateNote}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add note
+          </Button>
+        </div>
+      </div>
+
+      {/* Saved Notes Area */}
+      <ScrollArea className="flex-1 h-full">
+        <div className="p-4">
+          {isLoading ? (
+            <div className="text-center py-8">
+              <p className="text-sm text-gray-600">Loading notes...</p>
+            </div>
+          ) : notes && notes.length > 0 ? (
+            <div className="space-y-3">
+              {notes.map(note => (
+                <Card key={note.id} className="p-3 border border-gray-200 hover:bg-gray-50 cursor-pointer" onClick={() => handleEditNote(note)}>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2 mb-1">
+                        {note.source_type === 'ai_response' ? (
+                          <Bot className="h-3 w-3 text-blue-600" />
+                        ) : (
+                          <User className="h-3 w-3 text-gray-600" />
+                        )}
+                        <span className="text-xs text-gray-500 uppercase">
+                          {note.source_type === 'ai_response' ? 'AI Response' : 'Note'}
+                        </span>
+                      </div>
+                      <h4 className="font-medium text-gray-900 truncate">{note.title}</h4>
+                      <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+                        {getPreviewText(note)}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-2">
+                        {new Date(note.updated_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    {note.source_type === 'user' && (
+                      <Button variant="ghost" size="sm" className="ml-2">
+                        <Edit className="h-3 w-3" />
+                      </Button>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
               <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center">
                 <span className="text-gray-400 text-2xl">📄</span>
               </div>
@@ -330,10 +524,12 @@ const StudioSidebar = ({
               <p className="text-sm text-gray-600">
                 Save a chat message to create a new note, or click Add note above.
               </p>
-            </div>}
+            </div>
+          )}
         </div>
       </ScrollArea>
-    </div>;
+    </div>
+  );
 };
 
 export default StudioSidebar;
