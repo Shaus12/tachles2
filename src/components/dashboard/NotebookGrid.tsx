@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import NotebookCard from './NotebookCard';
@@ -14,7 +13,7 @@ import {
 
 const NotebookGrid = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [sortBy, setSortBy] = useState('Most recent');
+  const [sortBy, setSortBy] = useState('הכי חדש');
   const {
     notebooks,
     isLoading,
@@ -28,9 +27,9 @@ const NotebookGrid = () => {
     
     const sorted = [...notebooks];
     
-    if (sortBy === 'Most recent') {
+    if (sortBy === 'הכי חדש') {
       return sorted.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-    } else if (sortBy === 'Title') {
+    } else if (sortBy === 'כותרת') {
       return sorted.sort((a, b) => a.title.localeCompare(b.title));
     }
     
@@ -39,7 +38,7 @@ const NotebookGrid = () => {
 
   const handleCreateNotebook = () => {
     createNotebook({
-      title: 'Untitled notebook',
+      title: 'מחברת ללא כותרת',
       description: ''
     }, {
       onSuccess: data => {
@@ -64,15 +63,18 @@ const NotebookGrid = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center py-16">
-        <p className="text-gray-600">Loading notebooks...</p>
-      </div>;
+    return (
+      <div className="text-center py-16">
+        <p className="text-gray-600">טוען מחברות...</p>
+      </div>
+    );
   }
 
-  return <div>
+  return (
+    <div>
       <div className="flex items-center justify-between mb-8">
         <Button className="bg-black hover:bg-gray-800 text-white rounded-full px-6" onClick={handleCreateNotebook} disabled={isCreating}>
-          {isCreating ? 'Creating...' : '+ Create new'}
+          {isCreating ? 'יוצר...' : '+ צור חדש'}
         </Button>
         
         <div className="flex items-center space-x-4">
@@ -84,13 +86,13 @@ const NotebookGrid = () => {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => setSortBy('Most recent')} className="flex items-center justify-between">
-                Most recent
-                {sortBy === 'Most recent' && <Check className="h-4 w-4" />}
+              <DropdownMenuItem onClick={() => setSortBy('הכי חדש')} className="flex items-center justify-between">
+                הכי חדש
+                {sortBy === 'הכי חדש' && <Check className="h-4 w-4" />}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSortBy('Title')} className="flex items-center justify-between">
-                Title
-                {sortBy === 'Title' && <Check className="h-4 w-4" />}
+              <DropdownMenuItem onClick={() => setSortBy('כותרת')} className="flex items-center justify-between">
+                כותרת
+                {sortBy === 'כותרת' && <Check className="h-4 w-4" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -98,22 +100,25 @@ const NotebookGrid = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {sortedNotebooks.map(notebook => <div key={notebook.id} onClick={e => handleNotebookClick(notebook.id, e)}>
+        {sortedNotebooks.map(notebook => (
+          <div key={notebook.id} onClick={e => handleNotebookClick(notebook.id, e)}>
             <NotebookCard notebook={{
-          id: notebook.id,
-          title: notebook.title,
-          date: new Date(notebook.updated_at).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-          }),
-          sources: notebook.sources?.[0]?.count || 0,
-          icon: notebook.icon || '📝',
-          color: notebook.color || 'bg-gray-100'
-        }} />
-          </div>)}
+              id: notebook.id,
+              title: notebook.title,
+              date: new Date(notebook.updated_at).toLocaleDateString('he-IL', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+              }),
+              sources: notebook.sources?.[0]?.count || 0,
+              icon: notebook.icon || '📝',
+              color: notebook.color || 'bg-gray-100'
+            }} />
+          </div>
+        ))}
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default NotebookGrid;

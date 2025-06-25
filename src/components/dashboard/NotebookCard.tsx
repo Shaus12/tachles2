@@ -44,10 +44,11 @@ const NotebookCard = ({
   const backgroundClass = `bg-${colorName}-100`;
   const borderClass = `border-${colorName}-200`;
 
-  return <div 
+  return (
+    <div 
       className={`rounded-lg border ${borderClass} ${backgroundClass} p-4 hover:shadow-md transition-shadow cursor-pointer relative h-48 flex flex-col`}
     >
-      <div className="absolute top-3 right-3" data-delete-action="true">
+      <div className="absolute top-3 left-3" data-delete-action="true">
         <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <AlertDialogTrigger asChild>
             <button onClick={handleDeleteClick} className="p-1 hover:bg-red-50 rounded text-gray-400 hover:text-red-500 transition-colors delete-button" disabled={isDeleting} data-delete-action="true">
@@ -56,15 +57,15 @@ const NotebookCard = ({
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete this notebook?</AlertDialogTitle>
+              <AlertDialogTitle>למחוק את המחברת הזו?</AlertDialogTitle>
               <AlertDialogDescription>
-                You're about to delete this notebook and all of its content. This cannot be undone.
+                אתה עומד למחוק את המחברת הזו ואת כל התוכן שלה. לא ניתן לבטל פעולה זו.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>ביטול</AlertDialogCancel>
               <AlertDialogAction onClick={handleConfirmDelete} className="bg-blue-600 hover:bg-blue-700" disabled={isDeleting}>
-                {isDeleting ? 'Deleting...' : 'Delete'}
+                {isDeleting ? 'מוחק...' : 'מחק'}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -75,14 +76,15 @@ const NotebookCard = ({
         <span className="text-3xl">{notebook.icon}</span>
       </div>
       
-      <h3 className="text-gray-900 mb-2 pr-6 line-clamp-2 text-2xl font-normal flex-grow">
+      <h3 className="text-gray-900 mb-2 pl-6 line-clamp-2 text-2xl font-normal flex-grow">
         {notebook.title}
       </h3>
       
       <div className="flex items-center justify-between text-sm text-gray-500 mt-auto">
-        <span>{notebook.date} • {notebook.sources} source{notebook.sources !== 1 ? 's' : ''}</span>
+        <span>{notebook.date} • {notebook.sources} מקור{notebook.sources !== 1 ? 'ות' : ''}</span>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default NotebookCard;

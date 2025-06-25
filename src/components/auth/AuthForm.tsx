@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -40,9 +39,9 @@ const AuthForm = () => {
       if (error) {
         console.error('Sign in error:', error);
         if (error.message.includes('Invalid login credentials')) {
-          throw new Error('Invalid email or password. Please check your credentials and try again.');
+          throw new Error('אימייל או סיסמה שגויים. אנא בדוק את הפרטים ונסה שוב.');
         } else if (error.message.includes('Email not confirmed')) {
-          throw new Error('Please check your email and click the confirmation link before signing in.');
+          throw new Error('אנא בדוק את האימייל שלך ולחץ על קישור האישור לפני הכניסה.');
         } else {
           throw error;
         }
@@ -51,8 +50,8 @@ const AuthForm = () => {
       console.log('Sign in successful:', data.user?.email);
       
       toast({
-        title: "Welcome back!",
-        description: "You have successfully signed in.",
+        title: "ברוך הבא!",
+        description: "נכנסת בהצלחה למערכת.",
       });
 
       // The AuthContext will handle the redirect automatically
@@ -60,7 +59,7 @@ const AuthForm = () => {
     } catch (error: any) {
       console.error('Auth form error:', error);
       toast({
-        title: "Sign In Error",
+        title: "שגיאת כניסה",
         description: error.message,
         variant: "destructive",
       });
@@ -72,38 +71,38 @@ const AuthForm = () => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>כניסה למערכת</CardTitle>
         <CardDescription>
-          Enter your credentials to access your notebooks
+          הזן את פרטי הכניסה שלך כדי לגשת למחברות
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">אימייל</Label>
             <Input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="Enter your email"
+              placeholder="הזן את האימייל שלך"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">סיסמה</Label>
             <Input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter your password"
+              placeholder="הזן את הסיסמה שלך"
               minLength={6}
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? 'נכנס...' : 'כניסה'}
           </Button>
         </form>
       </CardContent>

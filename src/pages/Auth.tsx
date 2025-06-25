@@ -11,7 +11,7 @@ const Auth = () => {
             <Logo size="lg" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">TachlesAI</h1>
-          <p className="text-gray-600">Your AI-powered knowledge companion</p>
+          <p className="text-gray-600">הבינה המלאכותית שלך לניהול ידע</p>
         </div>
         <AuthForm />
       </div>

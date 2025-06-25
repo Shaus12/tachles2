@@ -31,8 +31,8 @@ const DashboardHeader = ({ userEmail }: DashboardHeaderProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuItem onClick={logout} className="cursor-pointer">
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
+                <LogOut className="h-4 w-4 ml-2" />
+                התנתק
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
