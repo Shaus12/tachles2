@@ -56,7 +56,7 @@ const NotebookHeader = ({ title, notebookId }: NotebookHeaderProps) => {
   };
 
   const handleBackToDashboard = () => {
-    navigate('/');
+    navigate('/app');
   };
 
   return (
