@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus, MoreVertical, Trash2, Edit, Loader2, CheckCircle, XCircle, Upload } from 'lucide-react';
@@ -155,7 +154,7 @@ const SourcesSidebar = ({
       source_title: source.title,
       source_type: source.type,
       chunk_index: 0,
-      excerpt: 'Full document view'
+      excerpt: 'תצוגת מסמך מלא'
       // Deliberately omitting chunk_lines_from and chunk_lines_to to prevent auto-scroll
     };
 
@@ -203,7 +202,7 @@ const SourcesSidebar = ({
         <div className="p-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-medium text-gray-900 cursor-pointer hover:text-gray-700" onClick={handleBackToSources}>
-              Sources
+              מקורות
             </h2>
             <Button variant="ghost" onClick={handleBackToSources} className="p-2 [&_svg]:!w-6 [&_svg]:!h-6">
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
@@ -229,13 +228,13 @@ const SourcesSidebar = ({
     <div className="w-full bg-gray-50 border-r border-gray-200 flex flex-col h-full overflow-hidden">
       <div className="p-4 border-b border-gray-200 flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium text-gray-900">Sources</h2>
+          <h2 className="text-lg font-medium text-gray-900">מקורות</h2>
         </div>
         
         <div className="flex space-x-2">
           <Button variant="outline" size="sm" className="flex-1" onClick={() => setShowAddSourcesDialog(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add
+            <Plus className="h-4 w-4 ml-2" />
+            הוסף
           </Button>
         </div>
       </div>
@@ -244,7 +243,7 @@ const SourcesSidebar = ({
         <div className="p-4">
           {isLoading ? (
             <div className="text-center py-8">
-              <p className="text-sm text-gray-600">Loading sources...</p>
+              <p className="text-sm text-gray-600">טוען מקורות...</p>
             </div>
           ) : sources && sources.length > 0 ? (
             <div className="space-y-4">
@@ -269,12 +268,12 @@ const SourcesSidebar = ({
                   </ContextMenuTrigger>
                   <ContextMenuContent>
                     <ContextMenuItem onClick={() => handleRenameSource(source)}>
-                      <Edit className="h-4 w-4 mr-2" />
-                      Rename source
+                      <Edit className="h-4 w-4 ml-2" />
+                      שנה שם מקור
                     </ContextMenuItem>
                     <ContextMenuItem onClick={() => handleRemoveSource(source)} className="text-red-600 focus:text-red-600">
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Remove source
+                      <Trash2 className="h-4 w-4 ml-2" />
+                      הסר מקור
                     </ContextMenuItem>
                   </ContextMenuContent>
                 </ContextMenu>
@@ -285,8 +284,8 @@ const SourcesSidebar = ({
               <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center">
                 <span className="text-gray-400 text-2xl">📄</span>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Saved sources will appear here</h3>
-              <p className="text-sm text-gray-600 mb-4">Click Add source above to add PDFs, text, or audio files.</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">מקורות שמורים יופיעו כאן</h3>
+              <p className="text-sm text-gray-600 mb-4">לחץ על הוסף מקור למעלה כדי להוסיף קבצי PDF, טקסט או אודיו.</p>
             </div>
           )}
         </div>
@@ -308,19 +307,19 @@ const SourcesSidebar = ({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete {selectedSource?.title}?</AlertDialogTitle>
+            <AlertDialogTitle>למחוק את {selectedSource?.title}?</AlertDialogTitle>
             <AlertDialogDescription>
-              You're about to delete this source. This cannot be undone.
+              אתה עומד למחוק את המקור הזה. לא ניתן לבטל פעולה זו.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>ביטול</AlertDialogCancel>
             <AlertDialogAction 
               onClick={confirmDelete} 
               className="bg-red-600 hover:bg-red-700" 
               disabled={isDeleting}
             >
-              {isDeleting ? 'Deleting...' : 'Delete'}
+              {isDeleting ? 'מוחק...' : 'מחק'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

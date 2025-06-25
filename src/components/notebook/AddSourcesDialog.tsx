@@ -157,8 +157,8 @@ const AddSourcesDialog = ({
   const handleFileUpload = async (files: File[]) => {
     if (!notebookId) {
       toast({
-        title: "Error",
-        description: "No notebook selected",
+        title: "שגיאה",
+        description: "לא נבחרה מחברת",
         variant: "destructive"
       });
       return;
@@ -225,8 +225,8 @@ const AddSourcesDialog = ({
 
       // Step 4: Show success toast
       toast({
-        title: "Files Added",
-        description: `${files.length} file${files.length > 1 ? 's' : ''} added and processing started`
+        title: "קבצים נוספו",
+        description: `${files.length} קובץ${files.length > 1 ? 'ים' : ''} נוסף${files.length > 1 ? 'ו' : ''} והעיבוד החל`
       });
 
       // Step 5: Process files in parallel (background)
@@ -244,8 +244,8 @@ const AddSourcesDialog = ({
 
         if (failed > 0) {
           toast({
-            title: "Processing Issues",
-            description: `${failed} file${failed > 1 ? 's' : ''} had processing issues. Check the sources list for details.`,
+            title: "בעיות עיבוד",
+            description: `${failed} קובץ${failed > 1 ? 'ים' : ''} נתקל${failed > 1 ? 'ו' : ''} בבעיות עיבוד. בדוק את רשימת המקורות לפרטים.`,
             variant: "destructive"
           });
         }
@@ -254,8 +254,8 @@ const AddSourcesDialog = ({
       console.error('Error creating sources:', error);
       setIsLocallyProcessing(false);
       toast({
-        title: "Error",
-        description: "Failed to add files. Please try again.",
+        title: "שגיאה",
+        description: "נכשל בהוספת קבצים. אנא נסה שוב.",
         variant: "destructive"
       });
     }
@@ -296,14 +296,14 @@ const AddSourcesDialog = ({
       }
 
       toast({
-        title: "Success",
-        description: "Text has been added and sent for processing"
+        title: "הצלחה",
+        description: "הטקסט נוסף ונשלח לעיבוד"
       });
     } catch (error) {
       console.error('Error adding text source:', error);
       toast({
-        title: "Error",
-        description: "Failed to add text source",
+        title: "שגיאה",
+        description: "נכשל בהוספת מקור טקסט",
         variant: "destructive"
       });
     } finally {
@@ -323,7 +323,7 @@ const AddSourcesDialog = ({
       // Create the first source immediately (this will trigger generation if it's the first source)
       const firstSource = await addSourceAsync({
         notebookId,
-        title: `Website 1: ${urls[0]}`,
+        title: `אתר 1: ${urls[0]}`,
         type: 'website',
         url: urls[0],
         processing_status: 'processing',
@@ -346,7 +346,7 @@ const AddSourcesDialog = ({
         remainingSources = await Promise.all(urls.slice(1).map(async (url, index) => {
           return await addSourceAsync({
             notebookId,
-            title: `Website ${index + 2}: ${url}`,
+            title: `אתר ${index + 2}: ${url}`,
             type: 'website',
             url,
             processing_status: 'processing',
@@ -379,16 +379,16 @@ const AddSourcesDialog = ({
       }
 
       toast({
-        title: "Success",
-        description: `${urls.length} website${urls.length > 1 ? 's' : ''} added and sent for processing`
+        title: "הצלחה",
+        description: `${urls.length} אתר${urls.length > 1 ? 'ים' : ''} נוסף${urls.length > 1 ? 'ו' : ''} ונשלח${urls.length > 1 ? 'ו' : ''} לעיבוד`
       });
 
       onOpenChange(false);
     } catch (error) {
       console.error('Error adding multiple websites:', error);
       toast({
-        title: "Error",
-        description: "Failed to add websites",
+        title: "שגיאה",
+        description: "נכשל בהוספת אתרים",
         variant: "destructive"
       });
     } finally {
@@ -411,17 +411,17 @@ const AddSourcesDialog = ({
                     <path d="M480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z" />
                   </svg>
                 </div>
-                <DialogTitle className="text-xl font-medium">InsightsLM</DialogTitle>
+                <DialogTitle className="text-xl font-medium">TachlesAI</DialogTitle>
               </div>
             </div>
           </DialogHeader>
 
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-medium mb-2">Add sources</h2>
-              <p className="text-gray-600 text-sm mb-1">Sources let InsightsLM base its responses on the information that matters most to you.</p>
+              <h2 className="text-xl font-medium mb-2">הוסף מקורות</h2>
+              <p className="text-gray-600 text-sm mb-1">מקורות מאפשרים ל-TachlesAI לבסס את התשובות שלו על המידע החשוב ביותר עבורך.</p>
               <p className="text-gray-500 text-xs">
-                (Examples: marketing plans, course reading, research notes, meeting transcripts, sales documents, etc.)
+                (דוגמאות: תוכניות שיווק, קריאה לקורס, הערות מחקר, תמלילי פגישות, מסמכי מכירות וכו')
               </p>
             </div>
 
@@ -441,28 +441,28 @@ const AddSourcesDialog = ({
                 </div>
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">
-                    {isProcessingFiles ? 'Processing files...' : 'Upload sources'}
+                    {isProcessingFiles ? 'מעבד קבצים...' : 'העלה מקורות'}
                   </h3>
                   <p className="text-gray-600 text-sm">
                     {isProcessingFiles ? (
-                      'Please wait while we process your files'
+                      'אנא המתן בזמן שאנו מעבדים את הקבצים שלך'
                     ) : (
                       <>
-                        Drag & drop or{' '}
+                        גרור ושחרר או{' '}
                         <button 
                           className="text-blue-600 hover:underline" 
                           onClick={() => document.getElementById('file-upload')?.click()}
                           disabled={isProcessingFiles}
                         >
-                          choose file
+                          בחר קובץ
                         </button>{' '}
-                        to upload
+                        להעלאה
                       </>
                     )}
                   </p>
                 </div>
                 <p className="text-xs text-gray-500">
-                  Supported file types: PDF, txt, Markdown, Audio (e.g. mp3)
+                  סוגי קבצים נתמכים: PDF, txt, Markdown, אודיו (למשל mp3)
                 </p>
                 <input
                   id="file-upload"
@@ -485,8 +485,8 @@ const AddSourcesDialog = ({
                 disabled={isProcessingFiles}
               >
                 <Link className="h-6 w-6 text-green-600" />
-                <span className="font-medium">Link - Website</span>
-                <span className="text-sm text-gray-500">Multiple URLs at once</span>
+                <span className="font-medium">קישור - אתר אינטרנט</span>
+                <span className="text-sm text-gray-500">מספר כתובות URL בבת אחת</span>
               </Button>
 
               <Button
@@ -496,8 +496,8 @@ const AddSourcesDialog = ({
                 disabled={isProcessingFiles}
               >
                 <Copy className="h-6 w-6 text-purple-600" />
-                <span className="font-medium">Paste Text - Copied Text</span>
-                <span className="text-sm text-gray-500">Add copied content</span>
+                <span className="font-medium">הדבק טקסט - טקסט מועתק</span>
+                <span className="text-sm text-gray-500">הוסף תוכן מועתק</span>
               </Button>
             </div>
           </div>
