@@ -24,7 +24,7 @@ const AuthForm = () => {
   useEffect(() => {
     if (isAuthenticated) {
       console.log('User is authenticated, redirecting to dashboard');
-      navigate('/', { replace: true });
+      navigate('/app', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 

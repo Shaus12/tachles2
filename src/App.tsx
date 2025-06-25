@@ -10,19 +10,21 @@ import Notebook from "./pages/Notebook";
 import Auth from "./pages/Auth";
 import SignUp from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
+import Landing from "./pages/Landing";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   return (
     <Routes>
-      <Route 
-        path="/" 
+      <Route path="/" element={<Landing />} />
+      <Route
+        path="/app"
         element={
           <ProtectedRoute fallback={<Auth />}>
             <Dashboard />
           </ProtectedRoute>
-        } 
+        }
       />
       <Route 
         path="/notebook" 
