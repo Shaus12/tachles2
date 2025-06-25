@@ -42,9 +42,11 @@ const Notebook = () => {
           {/* Left Side - Split between Podcast (top) and Notes (bottom) */}
           <div className="w-[40%] flex flex-col border-r border-gray-200">
             {/* Podcast Section - Top Half */}
-            <div className="h-1/2 border-b border-gray-200">
-              <div className="h-full bg-gray-50 p-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Audio Overview</h3>
+            <div className="h-1/2 border-b border-gray-200 flex flex-col">
+              <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+                <h3 className="text-lg font-medium text-gray-900">Audio Overview</h3>
+              </div>
+              <div className="flex-1 bg-gray-50 p-4 overflow-hidden">
                 <StudioSidebar 
                   notebookId={notebookId} 
                   onCitationClick={handleCitationClick}
@@ -54,9 +56,11 @@ const Notebook = () => {
             </div>
             
             {/* Notes Section - Bottom Half */}
-            <div className="h-1/2">
-              <div className="h-full bg-gray-50 p-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Notes</h3>
+            <div className="h-1/2 flex flex-col">
+              <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+                <h3 className="text-lg font-medium text-gray-900">Notes</h3>
+              </div>
+              <div className="flex-1 bg-gray-50 p-4 overflow-hidden">
                 <StudioSidebar 
                   notebookId={notebookId} 
                   onCitationClick={handleCitationClick}

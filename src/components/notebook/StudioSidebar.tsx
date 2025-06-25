@@ -246,10 +246,10 @@ const StudioSidebar = ({
               onUrlRefresh={handleUrlRefresh}
             />
           ) : (
-            <Card className="p-4 border border-gray-200">
+            <div className="space-y-4">
               {/* Hide this div when generating or auto-refreshing */}
               {currentStatus !== 'generating' && !isGenerating && !isAutoRefreshing && (
-                <div className="flex items-center space-x-3 mb-3">
+                <div className="flex items-center space-x-3 p-4 bg-white rounded-lg border border-gray-200">
                   <div className="w-8 h-8 rounded flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#111827">
                       <path d="M280-120v-123q-104-14-172-93T40-520h80q0 83 58.5 141.5T320-320h10q5 0 10-1 13 20 28 37.5t32 32.5q-10 3-19.5 4.5T360-243v123h-80Zm20-282q-43-8-71.5-40.5T200-520v-240q0-50 35-85t85-35q50 0 85 35t35 85v160H280v80q0 31 5 60.5t15 57.5Zm340 2q-50 0-85-35t-35-85v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q0 50-35 85t-85 35Zm-40 280v-123q-104-14-172-93t-68-184h80q0 83 58.5 141.5T640-320q83 0 141.5-58.5T840-520h80q0 105-68 184t-172 93v123h-80Zm40-360q17 0 28.5-11.5T680-520v-240q0-17-11.5-28.5T640-800q-17 0-28.5 11.5T600-760v240q0 17 11.5 28.5T640-480Zm0-160Z" />
@@ -264,7 +264,7 @@ const StudioSidebar = ({
               
               {/* Status Display */}
               {getStatusDisplay() && (
-                <div className="flex items-center space-x-2 mb-3 p-2 rounded-md bg-transparent">
+                <div className="flex items-center space-x-2 p-4 bg-white rounded-lg border border-gray-200">
                   {getStatusDisplay()!.icon}
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-900">{getStatusDisplay()!.text}</p>
@@ -275,7 +275,7 @@ const StudioSidebar = ({
               
               {/* Audio error div */}
               {audioError && (
-                <div className="flex items-center space-x-2 mb-3 p-2 bg-red-50 rounded-md">
+                <div className="flex items-center space-x-2 p-4 bg-red-50 rounded-lg border border-red-200">
                   <AlertCircle className="h-4 w-4 text-red-600" />
                   <div className="flex-1">
                     <p className="text-sm text-red-600">Audio unavailable</p>
@@ -304,7 +304,7 @@ const StudioSidebar = ({
                   )}
                 </Button>
               </div>
-            </Card>
+            </div>
           )}
         </div>
       </div>
