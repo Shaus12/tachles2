@@ -15,6 +15,7 @@ const AuthForm = () => {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -106,7 +107,8 @@ const AuthForm = () => {
         options: {
           data: {
             full_name: fullName,
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/auth`
         }
       });
       
@@ -123,19 +125,13 @@ const AuthForm = () => {
       
       console.log('Sign up successful:', data.user?.email);
       
-      if (data.user && !data.session) {
-        // Email confirmation required
-        toast({
-          title: "נרשמת בהצלחה!",
-          description: "אנא בדוק את האימייל שלך ולחץ על קישור האישור כדי להשלים את ההרשמה.",
-        });
-      } else {
-        // Auto sign in successful
-        toast({
-          title: "ברוך הבא!",
-          description: "נרשמת ונכנסת בהצלחה למערכת.",
-        });
-      }
+      // Always show email confirmation message for new signups
+      setShowEmailConfirmation(true);
+      
+      toast({
+        title: "נרשמת בהצלחה!",
+        description: "נשלח אימייל אישור לכתובת שהזנת. אנא בדוק את תיבת הדואר שלך ולחץ על הקישור כדי להשלים את ההרשמה.",
+      });
       
     } catch (error: any) {
       console.error('Sign up error:', error);
@@ -154,12 +150,57 @@ const AuthForm = () => {
     setPassword('');
     setConfirmPassword('');
     setFullName('');
+    setShowEmailConfirmation(false);
   };
 
   const toggleMode = () => {
     setIsSignUp(!isSignUp);
     resetForm();
   };
+
+  const handleBackToSignIn = () => {
+    setShowEmailConfirmation(false);
+    setIsSignUp(false);
+    resetForm();
+  };
+
+  // Show email confirmation screen after successful signup
+  if (showEmailConfirmation) {
+    return (
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader>
+          <CardTitle>בדוק את האימייל שלך</CardTitle>
+          <CardDescription>
+            נשלח אימייל אישור לכתובת {email}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">אימייל נשלח!</h3>
+            <p className="text-gray-600 mb-4">
+              אנא בדוק את תיבת הדואר שלך (כולל תיקיית הספאם) ולחץ על הקישור כדי לאמת את החשבון שלך.
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              לאחר האימות תוכל להתחבר למערכת עם הפרטים שהזנת.
+            </p>
+          </div>
+          
+          <Button 
+            onClick={handleBackToSignIn} 
+            variant="outline" 
+            className="w-full"
+          >
+            חזור לכניסה למערכת
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto">
