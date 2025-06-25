@@ -66,6 +66,7 @@ const ChatArea = ({
   // Ref for auto-scrolling to the most recent message
   const latestMessageRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     // If we have new messages and we have a pending message, clear it
     if (messages.length > lastMessageCount && pendingUserMessage) {
@@ -91,6 +92,7 @@ const ChatArea = ({
       }
     }
   }, [pendingUserMessage, messages.length, showAiLoading]);
+  
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || message.trim();
     if (textToSend && notebookId) {
@@ -114,6 +116,7 @@ const ChatArea = ({
       }
     }
   };
+  
   const handleRefreshChat = () => {
     if (notebookId) {
       console.log('Refresh button clicked for notebook:', notebookId);
@@ -122,9 +125,11 @@ const ChatArea = ({
       setClickedQuestions(new Set());
     }
   };
+  
   const handleCitationClick = (citation: Citation) => {
     onCitationClick?.(citation);
   };
+  
   const handleExampleQuestionClick = (question: string) => {
     // Add question to clicked set to remove it from display
     setClickedQuestions(prev => new Set(prev).add(question));
@@ -166,74 +171,105 @@ const ChatArea = ({
     }
     return "התחל לכתוב...";
   };
+  
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
       {hasSource ? (
         <div className="flex-1 flex flex-col h-full overflow-hidden">
-          {/* Chat Header */}
-          <div className="p-4 border-b border-gray-200 flex-shrink-0">
-            <div className="max-w-4xl mx-auto flex items-center justify-between">
-              <h2 className="text-lg font-medium text-gray-900">צ'אט</h2>
+          {/* Clean Chat Header */}
+          <div className="px-6 py-4 border-b border-gray-100 bg-white flex-shrink-0">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  {isGenerating ? (
+                    <Loader2 className="text-gray-600 w-5 h-5 animate-spin" />
+                  ) : (
+                    <span className="text-xl">{notebook?.icon || '💬'}</span>
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900">צ'אט</h2>
+                  <p className="text-sm text-gray-500">{sourceCount} מקור{sourceCount !== 1 ? 'ות' : ''}</p>
+                </div>
+              </div>
               {shouldShowRefreshButton && (
-                <Button variant="ghost" size="sm" onClick={handleRefreshChat} disabled={isDeletingChatHistory || isChatDisabled} className="flex items-center space-x-2">
-                  <RefreshCw className={`h-4 w-4 ${isDeletingChatHistory ? 'animate-spin' : ''}`} />
-                  <span>{isDeletingChatHistory ? 'מנקה...' : 'נקה צ\'אט'}</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleRefreshChat} 
+                  disabled={isDeletingChatHistory || isChatDisabled}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <RefreshCw className={`h-4 w-4 ml-2 ${isDeletingChatHistory ? 'animate-spin' : ''}`} />
+                  {isDeletingChatHistory ? 'מנקה...' : 'נקה צ\'אט'}
                 </Button>
               )}
             </div>
           </div>
 
-          <ScrollArea className="flex-1 h-full" ref={scrollAreaRef}>
+          <ScrollArea className="flex-1 h-full bg-gray-50" ref={scrollAreaRef}>
             {/* Document Summary */}
-            <div className="p-8 border-b border-gray-200">
+            <div className="p-6">
               <div className="max-w-4xl mx-auto">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="w-10 h-10 flex items-center justify-center bg-transparent">
-                    {isGenerating ? (
-                      <Loader2 className="text-black font-normal w-10 h-10 animate-spin" />
-                    ) : (
-                      <span className="text-[40px] leading-none">{notebook?.icon || '☕'}</span>
-                    )}
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-medium text-gray-900">
-                      {isGenerating ? 'יוצר תוכן...' : notebook?.title || 'מחברת ללא כותרת'}
-                    </h1>
-                    <p className="text-sm text-gray-600">{sourceCount} מקור{sourceCount !== 1 ? 'ות' : ''}</p>
-                  </div>
-                </div>
-                
-                <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                  {isGenerating ? (
-                    <div className="flex items-center space-x-2 text-gray-600">
-                      <p>הבינה המלאכותית מנתחת את המקור שלך ויוצרת כותרת ותיאור...</p>
+                {/* Notebook Info Card */}
+                <Card className="p-6 mb-6 bg-white border-0 shadow-sm">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-lg flex-shrink-0">
+                      {isGenerating ? (
+                        <Loader2 className="text-gray-600 w-6 h-6 animate-spin" />
+                      ) : (
+                        <span className="text-2xl">{notebook?.icon || '📝'}</span>
+                      )}
                     </div>
-                  ) : (
-                    <MarkdownRenderer 
-                      content={notebook?.description || 'אין תיאור זמין למחברת זו.'} 
-                      className="prose prose-gray max-w-none text-gray-700 leading-relaxed" 
-                    />
-                  )}
-                </div>
+                    <div className="flex-1 min-w-0">
+                      <h1 className="text-xl font-semibold text-gray-900 mb-2">
+                        {isGenerating ? 'יוצר תוכן...' : notebook?.title || 'מחברת ללא כותרת'}
+                      </h1>
+                      {isGenerating ? (
+                        <div className="flex items-center space-x-2 text-gray-600">
+                          <p className="text-sm">הבינה המלאכותית מנתחת את המקור שלך ויוצרת כותרת ותיאור...</p>
+                        </div>
+                      ) : (
+                        <div className="prose prose-sm prose-gray max-w-none text-gray-600">
+                          <MarkdownRenderer 
+                            content={notebook?.description || 'אין תיאור זמין למחברת זו.'} 
+                            className="text-sm leading-relaxed" 
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Card>
 
                 {/* Chat Messages */}
                 {(messages.length > 0 || pendingUserMessage || showAiLoading) && (
-                  <div className="mb-6 space-y-4">
+                  <div className="space-y-4">
                     {messages.map((msg, index) => (
                       <div key={msg.id} className={`flex ${isUserMessage(msg) ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`${isUserMessage(msg) ? 'max-w-xs lg:max-w-md px-4 py-2 bg-blue-500 text-white rounded-lg' : 'w-full'}`}>
-                          <div className={isUserMessage(msg) ? '' : 'prose prose-gray max-w-none text-gray-800'}>
+                        <div className={`${
+                          isUserMessage(msg) 
+                            ? 'max-w-xs lg:max-w-md px-4 py-3 bg-blue-600 text-white rounded-2xl rounded-br-md' 
+                            : 'max-w-full'
+                        }`}>
+                          {isUserMessage(msg) ? (
                             <MarkdownRenderer 
                               content={msg.message.content} 
-                              className={isUserMessage(msg) ? '' : ''} 
-                              onCitationClick={handleCitationClick} 
-                              isUserMessage={isUserMessage(msg)} 
+                              className="text-sm" 
+                              isUserMessage={true} 
                             />
-                          </div>
-                          {isAiMessage(msg) && (
-                            <div className="mt-2 flex justify-start">
-                              <SaveToNoteButton content={msg.message.content} notebookId={notebookId} />
-                            </div>
+                          ) : (
+                            <Card className="p-4 bg-white border-0 shadow-sm">
+                              <div className="prose prose-sm prose-gray max-w-none">
+                                <MarkdownRenderer 
+                                  content={msg.message.content} 
+                                  onCitationClick={handleCitationClick} 
+                                  isUserMessage={false} 
+                                />
+                              </div>
+                              <div className="mt-3 flex justify-start">
+                                <SaveToNoteButton content={msg.message.content} notebookId={notebookId} />
+                              </div>
+                            </Card>
                           )}
                         </div>
                       </div>
@@ -242,8 +278,8 @@ const ChatArea = ({
                     {/* Pending user message */}
                     {pendingUserMessage && (
                       <div className="flex justify-end">
-                        <div className="max-w-xs lg:max-w-md px-4 py-2 bg-blue-500 text-white rounded-lg">
-                          <MarkdownRenderer content={pendingUserMessage} className="" isUserMessage={true} />
+                        <div className="max-w-xs lg:max-w-md px-4 py-3 bg-blue-600 text-white rounded-2xl rounded-br-md">
+                          <MarkdownRenderer content={pendingUserMessage} className="text-sm" isUserMessage={true} />
                         </div>
                       </div>
                     )}
@@ -251,15 +287,17 @@ const ChatArea = ({
                     {/* AI Loading Indicator */}
                     {showAiLoading && (
                       <div className="flex justify-start" ref={latestMessageRef}>
-                        <div className="flex items-center space-x-2 px-4 py-3 bg-gray-100 rounded-lg">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{
-                            animationDelay: '0.1s'
-                          }}></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{
-                            animationDelay: '0.2s'
-                          }}></div>
-                        </div>
+                        <Card className="p-4 bg-white border-0 shadow-sm">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{
+                              animationDelay: '0.1s'
+                            }}></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{
+                              animationDelay: '0.2s'
+                            }}></div>
+                          </div>
+                        </Card>
                       </div>
                     )}
                     
@@ -271,24 +309,28 @@ const ChatArea = ({
             </div>
           </ScrollArea>
 
-          {/* Chat Input - Fixed at bottom */}
-          <div className="p-6 border-t border-gray-200 flex-shrink-0">
+          {/* Clean Chat Input */}
+          <div className="p-6 bg-white border-t border-gray-100 flex-shrink-0">
             <div className="max-w-4xl mx-auto">
-              <div className="flex space-x-4">
+              <div className="flex space-x-3">
                 <div className="flex-1 relative">
                   <Input 
                     placeholder={getPlaceholderText()} 
                     value={message} 
                     onChange={e => setMessage(e.target.value)} 
                     onKeyDown={e => e.key === 'Enter' && !isChatDisabled && !isSending && !pendingUserMessage && handleSendMessage()} 
-                    className="pl-12" 
+                    className="pl-4 pr-16 py-3 rounded-xl border-gray-200 focus:border-blue-500 focus:ring-blue-500" 
                     disabled={isChatDisabled || isSending || !!pendingUserMessage} 
                   />
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
                     {sourceCount} מקור{sourceCount !== 1 ? 'ות' : ''}
                   </div>
                 </div>
-                <Button onClick={() => handleSendMessage()} disabled={!message.trim() || isChatDisabled || isSending || !!pendingUserMessage}>
+                <Button 
+                  onClick={() => handleSendMessage()} 
+                  disabled={!message.trim() || isChatDisabled || isSending || !!pendingUserMessage}
+                  className="px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700"
+                >
                   {isSending || pendingUserMessage ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
@@ -297,7 +339,7 @@ const ChatArea = ({
                 </Button>
               </div>
               
-              {/* Example Questions Carousel */}
+              {/* Example Questions */}
               {!isChatDisabled && !pendingUserMessage && !showAiLoading && exampleQuestions.length > 0 && (
                 <div className="mt-4">
                   <Carousel className="w-full max-w-4xl">
@@ -307,7 +349,7 @@ const ChatArea = ({
                           <Button 
                             variant="outline" 
                             size="sm" 
-                            className="text-left whitespace-nowrap h-auto py-2 px-3 text-sm" 
+                            className="text-right whitespace-nowrap h-auto py-2 px-4 text-sm rounded-full border-gray-200 hover:bg-gray-50" 
                             onClick={() => handleExampleQuestionClick(question)}
                           >
                             {question}
@@ -317,8 +359,8 @@ const ChatArea = ({
                     </CarouselContent>
                     {exampleQuestions.length > 2 && (
                       <>
-                        <CarouselPrevious className="left-0" />
-                        <CarouselNext className="right-0" />
+                        <CarouselPrevious className="right-0" />
+                        <CarouselNext className="left-0" />
                       </>
                     )}
                   </Carousel>
@@ -328,38 +370,21 @@ const ChatArea = ({
           </div>
         </div>
       ) : (
-        // Empty State
-        <div className="flex-1 flex flex-col items-center justify-center p-8 overflow-hidden">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center bg-gray-100">
-              <Upload className="h-8 w-8 text-slate-600" />
+        // Clean Empty State
+        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-50">
+          <Card className="p-8 text-center bg-white border-0 shadow-sm max-w-md">
+            <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center bg-blue-50">
+              <Upload className="h-8 w-8 text-blue-600" />
             </div>
-            <h2 className="text-xl font-medium text-gray-900 mb-4">הוסף מקור כדי להתחיל</h2>
-            <Button onClick={() => setShowAddSourcesDialog(true)}>
+            <h2 className="text-xl font-semibold text-gray-900 mb-3">הוסף מקור כדי להתחיל</h2>
+            <p className="text-gray-600 mb-6">העלה מסמכים, קישורים או טקסט כדי להתחיל לשוחח עם הבינה המלאכותית</p>
+            <Button onClick={() => setShowAddSourcesDialog(true)} className="bg-blue-600 hover:bg-blue-700">
               <Upload className="h-4 w-4 ml-2" />
               העלה מקור
             </Button>
-          </div>
-
-          {/* Bottom Input */}
-          <div className="w-full max-w-2xl">
-            <div className="flex space-x-4">
-              <Input placeholder="העלה מקור כדי להתחיל" disabled className="flex-1" />
-              <div className="flex items-center text-sm text-gray-500">
-                0 מקורות
-              </div>
-              <Button disabled>
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+          </Card>
         </div>
       )}
-      
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-200 flex-shrink-0">
-        <p className="text-center text-sm text-gray-500">TachlesAI עלול להיות לא מדויק; אנא בדוק פעמיים את התשובות שלו.</p>
-      </div>
       
       {/* Add Sources Dialog */}
       <AddSourcesDialog open={showAddSourcesDialog} onOpenChange={setShowAddSourcesDialog} notebookId={notebookId} />

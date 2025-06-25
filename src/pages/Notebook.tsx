@@ -30,48 +30,28 @@ const Notebook = () => {
   };
 
   return (
-    <div className="h-screen bg-white flex flex-col overflow-hidden">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       <NotebookHeader 
-        title={notebook?.title || 'Untitled Notebook'} 
+        title={notebook?.title || 'מחברת ללא כותרת'} 
         notebookId={notebookId} 
       />
       
       {isDesktop ? (
-        // Desktop layout: Left side (podcast + notes) | Right side (chat)
+        // Desktop layout: Clean 3-column design
         <div className="flex-1 flex overflow-hidden">
-          {/* Left Side - Split between Podcast (top) and Notes (bottom) */}
-          <div className="w-[40%] flex flex-col border-r border-gray-200">
-            {/* Podcast Section - Top Half */}
-            <div className="h-1/2 border-b border-gray-200 flex flex-col">
-              <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
-                <h3 className="text-lg font-medium text-gray-900">Audio Overview</h3>
-              </div>
-              <div className="flex-1 bg-gray-50 p-4 overflow-hidden">
-                <StudioSidebar 
-                  notebookId={notebookId} 
-                  onCitationClick={handleCitationClick}
-                  showOnlyAudio={true}
-                />
-              </div>
-            </div>
-            
-            {/* Notes Section - Bottom Half */}
-            <div className="h-1/2 flex flex-col">
-              <div className="p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0">
-                <h3 className="text-lg font-medium text-gray-900">Notes</h3>
-              </div>
-              <div className="flex-1 bg-gray-50 p-4 overflow-hidden">
-                <StudioSidebar 
-                  notebookId={notebookId} 
-                  onCitationClick={handleCitationClick}
-                  showOnlyNotes={true}
-                />
-              </div>
-            </div>
+          {/* Left Sidebar - Sources */}
+          <div className="w-80 bg-white border-l border-gray-200 flex-shrink-0">
+            <SourcesSidebar 
+              hasSource={hasSource || false} 
+              notebookId={notebookId}
+              selectedCitation={selectedCitation}
+              onCitationClose={handleCitationClose}
+              setSelectedCitation={setSelectedCitation}
+            />
           </div>
           
-          {/* Right Side - Chat */}
-          <div className="flex-1">
+          {/* Main Content - Chat */}
+          <div className="flex-1 bg-white">
             <ChatArea 
               hasSource={hasSource || false} 
               notebookId={notebookId}
@@ -80,18 +60,13 @@ const Notebook = () => {
             />
           </div>
           
-          {/* Sources Sidebar - Show when citation is selected */}
-          {isSourceDocumentOpen && (
-            <div className="w-[35%] border-l border-gray-200">
-              <SourcesSidebar 
-                hasSource={hasSource || false} 
-                notebookId={notebookId}
-                selectedCitation={selectedCitation}
-                onCitationClose={handleCitationClose}
-                setSelectedCitation={setSelectedCitation}
-              />
-            </div>
-          )}
+          {/* Right Sidebar - Studio (Audio + Notes) */}
+          <div className="w-80 bg-white border-r border-gray-200 flex-shrink-0">
+            <StudioSidebar 
+              notebookId={notebookId} 
+              onCitationClick={handleCitationClick}
+            />
+          </div>
         </div>
       ) : (
         // Mobile/Tablet layout (tabs)

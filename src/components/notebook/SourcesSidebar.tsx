@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Plus, MoreVertical, Trash2, Edit, Loader2, CheckCircle, XCircle, Upload } from 'lucide-react';
+import { Plus, MoreVertical, Trash2, Edit, Loader2, CheckCircle, XCircle, Upload, ArrowRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '@/components/ui/context-menu';
@@ -198,16 +198,12 @@ const SourcesSidebar = ({
     const sourceUrl = selectedSourceForViewing ? getSelectedSourceUrl() : getSourceUrl(selectedCitation);
 
     return (
-      <div className="w-full bg-gray-50 border-r border-gray-200 flex flex-col h-full overflow-hidden">
-        <div className="p-4 border-b border-gray-200 flex-shrink-0">
+      <div className="w-full bg-white flex flex-col h-full overflow-hidden">
+        <div className="p-4 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-medium text-gray-900 cursor-pointer hover:text-gray-700" onClick={handleBackToSources}>
-              מקורות
-            </h2>
-            <Button variant="ghost" onClick={handleBackToSources} className="p-2 [&_svg]:!w-6 [&_svg]:!h-6">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                <path d="M440-440v240h-80v-160H200v-80h240Zm160-320v160h160v80H520v-240h80Z" />
-              </svg>
+            <Button variant="ghost" onClick={handleBackToSources} className="flex items-center text-gray-600 hover:text-gray-900">
+              <ArrowRight className="h-4 w-4 ml-2" />
+              <span>חזרה למקורות</span>
             </Button>
           </div>
         </div>
@@ -225,43 +221,53 @@ const SourcesSidebar = ({
   }
 
   return (
-    <div className="w-full bg-gray-50 border-r border-gray-200 flex flex-col h-full overflow-hidden">
-      <div className="p-4 border-b border-gray-200 flex-shrink-0">
+    <div className="w-full bg-white flex flex-col h-full overflow-hidden">
+      <div className="px-6 py-4 border-b border-gray-100 flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-medium text-gray-900">מקורות</h2>
+          <h2 className="text-lg font-semibold text-gray-900">מקורות</h2>
         </div>
         
-        <div className="flex space-x-2">
-          <Button variant="outline" size="sm" className="flex-1" onClick={() => setShowAddSourcesDialog(true)}>
-            <Plus className="h-4 w-4 ml-2" />
-            הוסף
-          </Button>
-        </div>
+        <Button 
+          className="w-full bg-blue-600 hover:bg-blue-700" 
+          onClick={() => setShowAddSourcesDialog(true)}
+        >
+          <Plus className="h-4 w-4 ml-2" />
+          הוסף מקור
+        </Button>
       </div>
 
       <ScrollArea className="flex-1 h-full">
         <div className="p-4">
           {isLoading ? (
             <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
               <p className="text-sm text-gray-600">טוען מקורות...</p>
             </div>
           ) : sources && sources.length > 0 ? (
-            <div className="space-y-4">
+            <div className="space-y-2">
               {sources.map((source) => (
                 <ContextMenu key={source.id}>
                   <ContextMenuTrigger>
-                    <Card className="p-3 border border-gray-200 cursor-pointer hover:bg-gray-50" onClick={() => handleSourceClick(source)}>
-                      <div className="flex items-start justify-between space-x-3">
-                        <div className="flex items-center space-x-2 flex-1 min-w-0">
-                          <div className="w-6 h-6 bg-white rounded border border-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                            {renderSourceIcon(source.type)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="text-sm text-gray-900 truncate block">{source.title}</span>
-                          </div>
+                    <Card 
+                      className="p-3 border-0 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors" 
+                      onClick={() => handleSourceClick(source)}
+                    >
+                      <div className="flex items-start space-x-3">
+                        <div className="w-8 h-8 bg-white rounded-lg border border-gray-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                          {renderSourceIcon(source.type)}
                         </div>
-                        <div className="flex-shrink-0 py-[4px]">
-                          {renderProcessingStatus(source.processing_status)}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-900 truncate block">{source.title}</span>
+                            <div className="flex-shrink-0 py-[4px]">
+                              {renderProcessingStatus(source.processing_status)}
+                            </div>
+                          </div>
+                          {source.summary && (
+                            <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                              {source.summary}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </Card>
@@ -281,11 +287,13 @@ const SourcesSidebar = ({
             </div>
           ) : (
             <div className="text-center py-8">
-              <div className="w-16 h-16 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                <span className="text-gray-400 text-2xl">📄</span>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">מקורות שמורים יופיעו כאן</h3>
-              <p className="text-sm text-gray-600 mb-4">לחץ על הוסף מקור למעלה כדי להוסיף קבצי PDF, טקסט או אודיו.</p>
+              <Card className="p-6 border-0 bg-gray-50">
+                <div className="w-16 h-16 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-gray-400 text-2xl">📄</span>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">מקורות שמורים יופיעו כאן</h3>
+                <p className="text-sm text-gray-600 mb-4">לחץ על הוסף מקור למעלה כדי להוסיף קבצי PDF, טקסט או אודיו.</p>
+              </Card>
             </div>
           )}
         </div>

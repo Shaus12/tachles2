@@ -34,34 +34,34 @@ const MobileNotebookTabs = ({
 }: MobileNotebookTabsProps) => {
   return (
     <Tabs defaultValue="chat" className="flex-1 flex flex-col overflow-hidden">
-      <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 h-12 rounded-none border-b border-gray-200">
+      <TabsList className="grid w-full grid-cols-4 bg-white p-1 h-14 rounded-none border-b border-gray-100">
         <TabsTrigger 
           value="sources" 
-          className="flex items-center space-x-2 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"
+          className="flex flex-col items-center justify-center space-y-1 text-sm data-[state=active]:bg-gray-50 data-[state=active]:shadow-none rounded-lg"
         >
-          <FileText className="h-4 w-4" />
-          <span className="hidden sm:inline">Sources</span>
+          <FileText className="h-5 w-5" />
+          <span className="text-xs">מקורות</span>
         </TabsTrigger>
         <TabsTrigger 
           value="chat" 
-          className="flex items-center space-x-2 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"
+          className="flex flex-col items-center justify-center space-y-1 text-sm data-[state=active]:bg-gray-50 data-[state=active]:shadow-none rounded-lg"
         >
-          <MessageCircle className="h-4 w-4" />
-          <span className="hidden sm:inline">Chat</span>
+          <MessageCircle className="h-5 w-5" />
+          <span className="text-xs">צ'אט</span>
         </TabsTrigger>
         <TabsTrigger 
           value="podcast" 
-          className="flex items-center space-x-2 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"
+          className="flex flex-col items-center justify-center space-y-1 text-sm data-[state=active]:bg-gray-50 data-[state=active]:shadow-none rounded-lg"
         >
-          <Headphones className="h-4 w-4" />
-          <span className="hidden sm:inline">Podcast</span>
+          <Headphones className="h-5 w-5" />
+          <span className="text-xs">אודיו</span>
         </TabsTrigger>
         <TabsTrigger 
           value="notes" 
-          className="flex items-center space-x-2 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"
+          className="flex flex-col items-center justify-center space-y-1 text-sm data-[state=active]:bg-gray-50 data-[state=active]:shadow-none rounded-lg"
         >
-          <NotebookPen className="h-4 w-4" />
-          <span className="hidden sm:inline">Notes</span>
+          <NotebookPen className="h-5 w-5" />
+          <span className="text-xs">הערות</span>
         </TabsTrigger>
       </TabsList>
 
@@ -85,8 +85,8 @@ const MobileNotebookTabs = ({
       </TabsContent>
 
       <TabsContent value="podcast" className="flex-1 overflow-hidden mt-0">
-        <div className="h-full bg-gray-50 p-4">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Audio Overview</h3>
+        <div className="h-full bg-white p-4">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">סקירת אודיו</h3>
           <StudioSidebar 
             notebookId={notebookId}
             onCitationClick={onCitationClick}
@@ -96,8 +96,8 @@ const MobileNotebookTabs = ({
       </TabsContent>
 
       <TabsContent value="notes" className="flex-1 overflow-hidden mt-0">
-        <div className="h-full bg-gray-50 p-4">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Notes</h3>
+        <div className="h-full bg-white p-4">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">הערות</h3>
           <StudioSidebar 
             notebookId={notebookId}
             onCitationClick={onCitationClick}
