@@ -28,6 +28,38 @@ const AuthForm = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // פונקציה לבדיקת חוזק סיסמה
+  const validatePassword = (password: string) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    const errors = [];
+    
+    if (password.length < minLength) {
+      errors.push(`לפחות ${minLength} תווים`);
+    }
+    if (!hasUpperCase) {
+      errors.push('לפחות אות גדולה אחת (A-Z)');
+    }
+    if (!hasLowerCase) {
+      errors.push('לפחות אות קטנה אחת (a-z)');
+    }
+    if (!hasNumbers) {
+      errors.push('לפחות מספר אחד (0-9)');
+    }
+    if (!hasSpecialChar) {
+      errors.push('לפחות תו מיוחד אחד (!@#$%^&*)');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
+  };
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -87,11 +119,12 @@ const AuthForm = () => {
       return;
     }
 
-    // Validate password length
-    if (password.length < 6) {
+    // בדיקת חוזק סיסמה
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
       toast({
-        title: "שגיאה",
-        description: "הסיסמה חייבת להכיל לפחות 6 תווים",
+        title: "סיסמה לא מאובטחת מספיק",
+        description: `הסיסמה חייבת לכלול: ${passwordValidation.errors.join(', ')}`,
         variant: "destructive",
       });
       setLoading(false);
