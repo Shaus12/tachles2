@@ -97,7 +97,7 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
   if (!isEditing && note) {
     // View mode for existing notes
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full max-h-[600px]">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
@@ -119,8 +119,8 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
         </div>
 
-        {/* Content */}
-        <div className="flex-1 p-4 overflow-auto">
+        {/* Content - Scrollable */}
+        <div className="flex-1 overflow-y-auto p-4">
           {isAIResponse && typeof parsedContent === 'object' ? (
             <MarkdownRenderer 
               content={parsedContent}
@@ -132,20 +132,19 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
           )}
         </div>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-gray-200 flex-shrink-0">
-          <div className="flex justify-between">
+        {/* Footer - Always visible */}
+        <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-white">
+          <div className="flex justify-between items-center">
             <div>
               {note && onDelete && (
                 <Button 
-                  variant="ghost" 
+                  variant="destructive" 
                   size="sm" 
                   onClick={onDelete}
                   disabled={isLoading}
-                  className="text-red-600 hover:text-red-700"
                 >
                   <Trash2 className="h-4 w-4 ml-2" />
-                  מחק
+                  מחק הערה
                 </Button>
               )}
             </div>
@@ -160,7 +159,7 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
 
   // Edit mode (only for user notes or new notes)
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full max-h-[600px]">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
@@ -172,7 +171,7 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
           </Button>
         </div>
         
-        <div className="flex space-x-2 mb-4">
+        <div className="flex space-x-2">
           <Input
             placeholder="כותרת הערה"
             value={title}
@@ -193,30 +192,29 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 p-4 overflow-hidden">
+      {/* Content - Scrollable */}
+      <div className="flex-1 p-4">
         <Textarea
           placeholder="כתוב את ההערה שלך כאן..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full h-full resize-none border-0 focus-visible:ring-0 p-0"
+          className="w-full h-full resize-none border border-gray-200 rounded-md p-3 focus-visible:ring-2 focus-visible:ring-blue-500"
         />
       </div>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-200 flex-shrink-0">
-        <div className="flex justify-between">
+      {/* Footer - Always visible */}
+      <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-white">
+        <div className="flex justify-between items-center">
           <div>
             {note && onDelete && !isAIResponse && (
               <Button 
-                variant="ghost" 
+                variant="destructive" 
                 size="sm" 
                 onClick={onDelete}
                 disabled={isLoading}
-                className="text-red-600 hover:text-red-700"
               >
                 <Trash2 className="h-4 w-4 ml-2" />
-                מחק
+                מחק הערה
               </Button>
             )}
           </div>
@@ -224,9 +222,10 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
             onClick={handleSave}
             disabled={!title.trim() || !content.trim() || isLoading}
             size="sm"
+            className="bg-blue-600 hover:bg-blue-700"
           >
             <Save className="h-4 w-4 ml-2" />
-            {isLoading ? 'שומר...' : 'שמור'}
+            {isLoading ? 'שומר...' : 'שמור הערה'}
           </Button>
         </div>
       </div>

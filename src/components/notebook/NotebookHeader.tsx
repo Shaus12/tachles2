@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { User, LogOut, ChevronRight } from 'lucide-react';
+import { User, LogOut, ChevronRight, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNotebookUpdate } from '@/hooks/useNotebookUpdate';
+import { useIsDesktop } from '@/hooks/useIsDesktop';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,14 +17,17 @@ import Logo from '@/components/ui/Logo';
 interface NotebookHeaderProps {
   title: string;
   notebookId?: string;
+  onSourcesClick?: () => void;
+  sourcesCount?: number;
 }
 
-const NotebookHeader = ({ title, notebookId }: NotebookHeaderProps) => {
+const NotebookHeader = ({ title, notebookId, onSourcesClick, sourcesCount }: NotebookHeaderProps) => {
   const navigate = useNavigate();
   const { logout } = useLogout();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
   const { updateNotebook, isUpdating } = useNotebookUpdate();
+  const isDesktop = useIsDesktop();
 
   const handleTitleClick = () => {
     if (notebookId) {
@@ -94,6 +98,24 @@ const NotebookHeader = ({ title, notebookId }: NotebookHeaderProps) => {
         </div>
         
         <div className="flex items-center space-x-4">
+          {/* Sources button - only show on desktop */}
+          {isDesktop && onSourcesClick && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onSourcesClick}
+              className="flex items-center text-gray-600 hover:text-gray-900"
+            >
+              <FileText className="h-4 w-4 ml-2" />
+              מקורות
+              {sourcesCount && sourcesCount > 0 && (
+                <span className="mr-2 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full">
+                  {sourcesCount}
+                </span>
+              )}
+            </Button>
+          )}
+          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="p-0">
