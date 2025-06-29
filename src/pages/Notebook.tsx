@@ -16,6 +16,7 @@ import { useAudioOverview } from '@/hooks/useAudioOverview';
 import { useNotes } from '@/hooks/useNotes';
 import { Plus, Headphones, Gamepad2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import QuizDialog from '@/components/quiz/QuizDialog';
 
 const Notebook = () => {
   const { id: notebookId } = useParams();
@@ -23,6 +24,7 @@ const Notebook = () => {
   const { sources } = useSources(notebookId);
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
   const [showSourcesSheet, setShowSourcesSheet] = useState(false);
+  const [showQuizDialog, setShowQuizDialog] = useState(false);
   const isDesktop = useIsDesktop();
 
   const { 
@@ -127,7 +129,7 @@ const Notebook = () => {
                 </button>
                 <button
                   className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-400 to-blue-400 text-white font-bold rounded-full shadow hover:from-green-500 hover:to-blue-500 transition-all"
-                  // כרגע לא עושה כלום
+                  onClick={() => setShowQuizDialog(true)}
                 >
                   <Gamepad2 className="w-5 h-5" />
                   חידונים ומשחקי למידה
@@ -193,6 +195,14 @@ const Notebook = () => {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Quiz Dialog */}
+      <QuizDialog
+        isOpen={showQuizDialog}
+        onClose={() => setShowQuizDialog(false)}
+        notebookId={notebookId || ''}
+        notebookTitle={notebook?.title || 'מחברת ללא כותרת'}
+      />
     </div>
   );
 };

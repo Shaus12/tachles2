@@ -172,6 +172,162 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          is_correct: boolean
+          notebook_id: string
+          question_id: string
+          time_taken: number | null
+          user_answer: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_correct: boolean
+          notebook_id: string
+          question_id: string
+          time_taken?: number | null
+          user_answer: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_correct?: boolean
+          notebook_id?: string
+          question_id?: string
+          time_taken?: number | null
+          user_answer?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_attempts_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_attempts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_questions: {
+        Row: {
+          correct_answer: string
+          created_at: string
+          difficulty: string | null
+          explanation: string | null
+          id: string
+          notebook_id: string
+          options: Json | null
+          question: string
+          question_type: string | null
+          source_reference: string | null
+          updated_at: string
+        }
+        Insert: {
+          correct_answer: string
+          created_at?: string
+          difficulty?: string | null
+          explanation?: string | null
+          id?: string
+          notebook_id: string
+          options?: Json | null
+          question: string
+          question_type?: string | null
+          source_reference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          correct_answer?: string
+          created_at?: string
+          difficulty?: string | null
+          explanation?: string | null
+          id?: string
+          notebook_id?: string
+          options?: Json | null
+          question?: string
+          question_type?: string | null
+          source_reference?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_questions_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_sessions: {
+        Row: {
+          completed_at: string | null
+          correct_answers: number | null
+          created_at: string
+          id: string
+          notebook_id: string
+          questions_count: number
+          session_type: string | null
+          total_time: number | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          correct_answers?: number | null
+          created_at?: string
+          id?: string
+          notebook_id: string
+          questions_count?: number
+          session_type?: string | null
+          total_time?: number | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          correct_answers?: number | null
+          created_at?: string
+          id?: string
+          notebook_id?: string
+          questions_count?: number
+          session_type?: string | null
+          total_time?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_sessions_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sources: {
         Row: {
           content: string | null
