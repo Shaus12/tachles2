@@ -28,10 +28,17 @@ export const useQuizSession = (notebookId?: string) => {
     setIsLoading(true);
     
     try {
+      // Get the current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        throw new Error('User not authenticated');
+      }
+
       // יצירת הפעלה חדשה בטבלה
       const { data: session, error } = await supabase
         .from('quiz_sessions')
         .insert({
+          user_id: user.id,
           notebook_id: notebookId,
           session_type: sessionType,
           questions_count: questions.length,
@@ -69,11 +76,17 @@ export const useQuizSession = (notebookId?: string) => {
     const isCorrect = answer === currentQ.correct_answer;
 
     try {
+      // Get the current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        throw new Error('User not authenticated');
+      }
+
       // שמירת התשובה בטבלה
       const { data: attempt, error } = await supabase
         .from('quiz_attempts')
         .insert({
-          user_id: (await supabase.auth.getUser()).data.user?.id || '',
+          user_id: user.id,
           notebook_id: notebookId,
           question_id: currentQ.id,
           user_answer: answer,
@@ -165,4 +178,4 @@ export const useQuizSession = (notebookId?: string) => {
       ? ((sessionData.currentQuestion + 1) / sessionData.questions.length) * 100 
       : 0
   };
-}; 
+};
