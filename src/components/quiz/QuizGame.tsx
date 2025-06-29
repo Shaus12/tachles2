@@ -118,7 +118,26 @@ const QuizGame: React.FC<QuizGameProps> = ({ questions, notebookId, onComplete, 
     );
   }
 
-  const options = currentQuestion.options as string[] || [];
+  // Parse options safely with error handling
+  let options: string[] = [];
+  try {
+    if (currentQuestion.options) {
+      if (typeof currentQuestion.options === 'string') {
+        options = JSON.parse(currentQuestion.options);
+      } else if (Array.isArray(currentQuestion.options)) {
+        options = currentQuestion.options;
+      }
+    }
+  } catch (error) {
+    console.error('Error parsing quiz options:', error);
+    options = [];
+  }
+
+  // Ensure options is always an array
+  if (!Array.isArray(options)) {
+    options = [];
+  }
+
   const isMultipleChoice = currentQuestion.question_type === 'multiple_choice' && options.length > 0;
 
   return (
@@ -249,4 +268,4 @@ const QuizGame: React.FC<QuizGameProps> = ({ questions, notebookId, onComplete, 
   );
 };
 
-export default QuizGame; 
+export default QuizGame;
