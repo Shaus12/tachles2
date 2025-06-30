@@ -107,11 +107,28 @@ export const sampleQuizQuestions = [
 
 export const createSampleQuestions = async (supabase: any, notebookId: string) => {
   try {
-    const questionsToInsert = sampleQuizQuestions.map(q => ({
-      ...q,
-      notebook_id: notebookId,
-      options: JSON.stringify(q.options)
-    }));
+    const questionsToInsert = sampleQuizQuestions.map(q => {
+      // Find the correct answer and filter out wrong answers
+      const wrongAnswers = q.options.filter(option => option !== q.correct_answer);
+      
+      // Ensure we have exactly 3 wrong answers, pad with empty strings if needed
+      while (wrongAnswers.length < 3) {
+        wrongAnswers.push('');
+      }
+
+      return {
+        question: q.question,
+        question_type: q.question_type,
+        correct_answer: q.correct_answer,
+        wrong_answer_1: wrongAnswers[0] || '',
+        wrong_answer_2: wrongAnswers[1] || '',
+        wrong_answer_3: wrongAnswers[2] || '',
+        explanation: q.explanation,
+        difficulty: q.difficulty,
+        notebook_id: notebookId,
+        options: JSON.stringify(q.options)
+      };
+    });
 
     const { data, error } = await supabase
       .from('quiz_questions')
@@ -126,4 +143,4 @@ export const createSampleQuestions = async (supabase: any, notebookId: string) =
     console.error('Error creating sample questions:', error);
     throw error;
   }
-}; 
+};
