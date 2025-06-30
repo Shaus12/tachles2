@@ -155,13 +155,13 @@ const NotesCarousel = ({
                     {/* Carousel */}
        <Carousel 
          setApi={setApi}
-         className="flex-1"
+         className="flex-1 overflow-hidden"
          opts={{
            align: "start",
            direction: "rtl"
          }}
        >
-         <CarouselContent className="h-[600px]">
+         <CarouselContent className="h-full">
            {/* רכיבי הערות קיימות */}
            {notes.map((note) => (
              <CarouselItem key={note.id} className="h-full">
@@ -193,8 +193,8 @@ const NotesCarousel = ({
                        </div>
                        
                        <h3 className="font-medium text-gray-900 mb-2">{note.title}</h3>
-                       <div className="text-sm text-gray-600 flex-grow overflow-y-auto">
-                         <div className="whitespace-pre-wrap line-clamp-[20]">
+                       <div className="text-sm text-gray-600 flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                         <div className="whitespace-pre-wrap">
                            {getPreviewText(note)}
                          </div>
                        </div>

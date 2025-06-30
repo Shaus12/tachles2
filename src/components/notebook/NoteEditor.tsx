@@ -97,7 +97,7 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
   if (!isEditing && note) {
     // View mode for existing notes
     return (
-      <div className="flex flex-col h-full max-h-[600px]">
+      <div className="flex flex-col h-full">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
@@ -120,7 +120,7 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
         </div>
 
         {/* Content - Scrollable */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {isAIResponse && typeof parsedContent === 'object' ? (
             <MarkdownRenderer 
               content={parsedContent}
@@ -159,7 +159,7 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
 
   // Edit mode (only for user notes or new notes)
   return (
-    <div className="flex flex-col h-full max-h-[600px]">
+    <div className="flex flex-col h-full">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 flex-shrink-0">
         <div className="flex items-center justify-between mb-4">
@@ -193,12 +193,12 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
       </div>
 
       {/* Content - Scrollable */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 overflow-hidden">
         <Textarea
           placeholder="כתוב את ההערה שלך כאן..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full h-full resize-none border border-gray-200 rounded-md p-3 focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="w-full h-full resize-none border border-gray-200 rounded-md p-3 focus-visible:ring-2 focus-visible:ring-blue-500 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
         />
       </div>
 

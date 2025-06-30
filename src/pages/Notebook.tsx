@@ -120,7 +120,7 @@ const Notebook = () => {
             <div className="h-1/2 min-h-[240px] max-h-[320px] border-b border-gray-100 flex-shrink-0 flex flex-col justify-center p-4">
               <div className="flex items-center justify-between mb-2">
                 <button
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-400 to-purple-400 text-white font-bold rounded-full shadow hover:from-blue-500 hover:to-purple-500 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-400 to-red-500 text-white font-bold rounded-full shadow hover:from-orange-500 hover:to-red-600 transition-all transform hover:scale-105"
                   onClick={() => generateAudioOverview(notebookId)}
                   disabled={isGenerating}
                 >
@@ -128,7 +128,7 @@ const Notebook = () => {
                   {isGenerating ? 'יוצר פודקאסט...' : 'צור פודקאסט'}
                 </button>
                 <button
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-400 to-blue-400 text-white font-bold rounded-full shadow hover:from-green-500 hover:to-blue-500 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-full shadow hover:from-purple-600 hover:to-indigo-700 transition-all transform hover:scale-105"
                   onClick={() => setShowQuizDialog(true)}
                 >
                   <Gamepad2 className="w-5 h-5" />
@@ -147,22 +147,24 @@ const Notebook = () => {
               )}
             </div>
             {/* Notes Carousel */}
-            <NotesCarousel 
-              notes={notes || []}
-              isCreating={isCreating}
-              isUpdating={isUpdating}
-              isDeleting={isDeleting}
-              onNoteSave={handleNoteSave}
-              onNoteDelete={handleNoteDelete}
-              onCreateNote={() => {
-                setSelectedNote(null);
-                setIsCreatingNote(true);
-              }}
-              selectedNote={selectedNote}
-              setSelectedNote={setSelectedNote}
-              isCreatingNote={isCreatingNote}
-              setIsCreatingNote={setIsCreatingNote}
-            />
+            <div className="flex-1 overflow-hidden">
+              <NotesCarousel 
+                notes={notes || []}
+                isCreating={isCreating}
+                isUpdating={isUpdating}
+                isDeleting={isDeleting}
+                onNoteSave={handleNoteSave}
+                onNoteDelete={handleNoteDelete}
+                onCreateNote={() => {
+                  setSelectedNote(null);
+                  setIsCreatingNote(true);
+                }}
+                selectedNote={selectedNote}
+                setSelectedNote={setSelectedNote}
+                isCreatingNote={isCreatingNote}
+                setIsCreatingNote={setIsCreatingNote}
+              />
+            </div>
           </div>
         </div>
       ) : (
