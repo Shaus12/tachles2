@@ -158,7 +158,7 @@ const NotesCarousel = ({
          className="flex-1 overflow-hidden"
          opts={{
            align: "start",
-           direction: "rtl"
+           direction: "ltr"
          }}
        >
          <CarouselContent className="h-full">
