@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import NotebookCard from './NotebookCard';
 import { Check, Grid3X3, List, ChevronDown } from 'lucide-react';
 import { useNotebooks } from '@/hooks/useNotebooks';
 import { useNavigate } from 'react-router-dom';
+import { StaggerContainer, StaggerItem } from '@/components/ui/StaggerContainer';
+import FadeIn from '@/components/ui/FadeIn';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -64,59 +67,104 @@ const NotebookGrid = () => {
 
   if (isLoading) {
     return (
-      <div className="text-center py-16">
-        <p className="text-gray-600">טוען מחברות...</p>
-      </div>
+      <StaggerContainer staggerDelay={0.1} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <StaggerItem key={index}>
+            <motion.div 
+              className="bg-gray-200 rounded-xl h-48 p-4"
+              initial={{ opacity: 0.6 }}
+              animate={{ 
+                opacity: [0.6, 1, 0.6],
+                scale: [1, 1.02, 1]
+              }}
+              transition={{ 
+                duration: 1.5, 
+                repeat: Infinity,
+                delay: index * 0.1
+              }}
+            >
+              <div className="h-6 bg-gray-300 rounded mb-3 animate-pulse" />
+              <div className="h-4 bg-gray-300 rounded mb-2 animate-pulse" />
+              <div className="h-4 bg-gray-300 rounded w-3/4 animate-pulse" />
+            </motion.div>
+          </StaggerItem>
+        ))}
+      </StaggerContainer>
     );
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <Button className="bg-black hover:bg-gray-800 text-white rounded-full px-6" onClick={handleCreateNotebook} disabled={isCreating}>
-          {isCreating ? 'יוצר...' : '+ צור חדש'}
-        </Button>
+        <FadeIn direction="left">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button 
+              className="bg-black hover:bg-gray-800 text-white rounded-full px-6" 
+              onClick={handleCreateNotebook} 
+              disabled={isCreating}
+            >
+              {isCreating ? 'יוצר...' : '+ צור חדש'}
+            </Button>
+          </motion.div>
+        </FadeIn>
         
-        <div className="flex items-center space-x-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="flex items-center space-x-2 bg-white rounded-lg border px-3 py-2 cursor-pointer hover:bg-gray-50 transition-colors">
-                <span className="text-sm text-gray-600">{sortBy}</span>
-                <ChevronDown className="h-4 w-4 text-gray-400" />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => setSortBy('הכי חדש')} className="flex items-center justify-between">
-                הכי חדש
-                {sortBy === 'הכי חדש' && <Check className="h-4 w-4" />}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSortBy('כותרת')} className="flex items-center justify-between">
-                כותרת
-                {sortBy === 'כותרת' && <Check className="h-4 w-4" />}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <FadeIn direction="right" delay={0.2}>
+          <div className="flex items-center space-x-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <motion.div 
+                  className="flex items-center space-x-2 bg-white rounded-lg border px-3 py-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="text-sm text-gray-600">{sortBy}</span>
+                  <ChevronDown className="h-4 w-4 text-gray-400" />
+                </motion.div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => setSortBy('הכי חדש')} className="flex items-center justify-between">
+                  הכי חדש
+                  {sortBy === 'הכי חדש' && <Check className="h-4 w-4" />}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy('כותרת')} className="flex items-center justify-between">
+                  כותרת
+                  {sortBy === 'כותרת' && <Check className="h-4 w-4" />}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </FadeIn>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <StaggerContainer staggerDelay={0.1} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {sortedNotebooks.map(notebook => (
-          <div key={notebook.id} onClick={e => handleNotebookClick(notebook.id, e)}>
-            <NotebookCard notebook={{
-              id: notebook.id,
-              title: notebook.title,
-              date: new Date(notebook.updated_at).toLocaleDateString('he-IL', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-              }),
-              sources: notebook.sources?.[0]?.count || 0,
-              icon: notebook.icon || '📝',
-              color: notebook.color || 'bg-gray-100'
-            }} />
-          </div>
+          <StaggerItem key={notebook.id}>
+            <motion.div 
+              onClick={e => handleNotebookClick(notebook.id, e)}
+              whileHover={{ y: -5, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="cursor-pointer"
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              <NotebookCard notebook={{
+                id: notebook.id,
+                title: notebook.title,
+                date: new Date(notebook.updated_at).toLocaleDateString('he-IL', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric'
+                }),
+                sources: notebook.sources?.[0]?.count || 0,
+                icon: notebook.icon || '📝',
+                color: notebook.color || 'bg-gray-100'
+              }} />
+            </motion.div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
     </div>
   );
 };

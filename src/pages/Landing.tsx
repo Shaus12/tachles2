@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, BookOpen, Zap, Shield, Headphones, Users, GraduationCap, Building, Sparkles, TrendingUp, Brain, Target, Award, Lightbulb } from 'lucide-react';
+import { ChevronDown, BookOpen, Zap, Shield, Headphones, Users, GraduationCap, Building, Sparkles, TrendingUp, Brain, Target, Award, Lightbulb, MessageSquare, FileText, ArrowRight, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '@/components/ui/Logo';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { useAuth } from '@/contexts/AuthContext';
+import FadeIn from '@/components/ui/FadeIn';
+import { StaggerContainer, StaggerItem } from '@/components/ui/StaggerContainer';
+import { motion } from 'framer-motion';
 
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -23,32 +29,61 @@ const AnimatedCounter = ({ end, duration = 2000 }) => {
 };
 
 const FeatureCard = ({ icon: Icon, title, description, delay = 0 }) => (
-  <div 
-    className="group relative bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-blue-400/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20"
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-    <div className="relative z-10">
-      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-        <Icon className="w-6 h-6 text-white" />
-      </div>
-      <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-400 transition-colors duration-300">{title}</h3>
-      <p className="text-blue-900 font-semibold leading-relaxed drop-shadow group-hover:text-purple-800 transition-colors duration-300">{description}</p>
-    </div>
-  </div>
+  <FadeIn delay={delay / 1000} direction="up" className="h-full">
+    <motion.div 
+      className="bg-white/40 backdrop-blur-xl p-8 rounded-3xl border border-white/30 h-full hover:bg-white/50 transition-all duration-300 shadow-lg"
+      whileHover={{ 
+        scale: 1.05,
+        y: -10,
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
+      <motion.div 
+        className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 mx-auto"
+        whileHover={{ rotate: 360 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Icon className="w-8 h-8 text-white" />
+      </motion.div>
+      <h3 className="text-xl font-bold text-blue-900 mb-4 text-center">{title}</h3>
+      <p className="text-blue-800 text-center leading-relaxed">{description}</p>
+    </motion.div>
+  </FadeIn>
 );
 
 const StepCard = ({ number, title, description, delay = 0 }) => (
-  <div 
-    className="relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-blue-400/50 transition-all duration-500 hover:scale-105 group"
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-110 transition-transform duration-300">
-      {number}
-    </div>
-    <h3 className="text-xl font-semibold mb-3 group-hover:text-blue-400 transition-colors duration-300">{title}</h3>
-    <p className="text-blue-900 font-semibold leading-relaxed drop-shadow group-hover:text-purple-800 transition-colors duration-300">{description}</p>
-  </div>
+  <FadeIn delay={delay / 1000} direction="up" className="h-full">
+    <motion.div 
+      className="bg-white/30 backdrop-blur-xl p-8 rounded-3xl border border-white/20 h-full text-center hover:bg-white/40 transition-all duration-300"
+      whileHover={{ 
+        scale: 1.03,
+        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)"
+      }}
+    >
+      <motion.div 
+        className="w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-600 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-6 mx-auto"
+        whileHover={{ scale: 1.1 }}
+        animate={{ 
+          scale: [1, 1.05, 1],
+          boxShadow: [
+            "0 0 0 0 rgba(168, 85, 247, 0.4)",
+            "0 0 0 10px rgba(168, 85, 247, 0)",
+            "0 0 0 0 rgba(168, 85, 247, 0)"
+          ]
+        }}
+        transition={{ 
+          duration: 2,
+          repeat: Infinity,
+          delay: delay / 1000
+        }}
+      >
+        {number}
+      </motion.div>
+      <h3 className="text-xl font-bold text-blue-900 mb-4">{title}</h3>
+      <p className="text-blue-800 leading-relaxed">{description}</p>
+    </motion.div>
+  </FadeIn>
 );
 
 const FloatingElement = ({ children, delay = 0 }) => (
@@ -201,13 +236,13 @@ const Landing = () => {
         </div>
 
         <header className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-xl border-b border-blue-200/30">
-                          <div className={`flex items-center space-x-3 transform transition-all duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}> 
+                          <div className={`flex items-center space-x-3 rtl:space-x-reverse transform transition-all duration-1000 ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}> 
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center animate-pulse-glow">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">TachlesAI</span>
           </div>
-                      <div className={`flex items-center space-x-4 transform transition-all duration-1000 delay-200 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}> 
+                      <div className={`flex items-center space-x-4 rtl:space-x-reverse transform transition-all duration-1000 delay-200 ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}> 
             <button
               className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
               onClick={() => navigate('/signup')}
