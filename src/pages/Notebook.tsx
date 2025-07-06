@@ -17,6 +17,7 @@ import { useNotes } from '@/hooks/useNotes';
 import { Plus, Headphones, Gamepad2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import QuizDialog from '@/components/quiz/QuizDialog';
+import ProgressDialog from '@/components/notebook/ProgressDialog';
 
 const Notebook = () => {
   const { id: notebookId } = useParams();
@@ -25,6 +26,7 @@ const Notebook = () => {
   const [selectedCitation, setSelectedCitation] = useState<Citation | null>(null);
   const [showSourcesSheet, setShowSourcesSheet] = useState(false);
   const [showQuizDialog, setShowQuizDialog] = useState(false);
+  const [showProgressDialog, setShowProgressDialog] = useState(false);
   const isDesktop = useIsDesktop();
 
   const { 
@@ -101,6 +103,7 @@ const Notebook = () => {
         notebookId={notebookId} 
         onSourcesClick={() => setShowSourcesSheet(true)}
         sourcesCount={sources?.length || 0}
+        onProgressClick={() => setShowProgressDialog(true)}
       />
       
       {isDesktop ? (
@@ -204,6 +207,13 @@ const Notebook = () => {
         onClose={() => setShowQuizDialog(false)}
         notebookId={notebookId || ''}
         notebookTitle={notebook?.title || 'מחברת ללא כותרת'}
+      />
+
+      {/* Progress Dialog */}
+      <ProgressDialog
+        isOpen={showProgressDialog}
+        onClose={() => setShowProgressDialog(false)}
+        notebookId={notebookId}
       />
     </div>
   );

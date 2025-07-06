@@ -166,9 +166,20 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
           <h3 className="font-medium text-gray-900">
             {note ? 'ערוך הערה' : 'הערה חדשה'}
           </h3>
-          <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
-            <X className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button 
+              onClick={handleSave}
+              disabled={!title.trim() || !content.trim() || isLoading}
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              <Save className="h-4 w-4 ml-2" />
+              {isLoading ? 'שומר...' : 'שמור הערה'}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
         
         <div className="flex space-x-2">
@@ -204,7 +215,7 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
 
       {/* Footer - Always visible */}
       <div className="p-4 border-t border-gray-200 flex-shrink-0 bg-white">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-start items-center">
           <div>
             {note && onDelete && !isAIResponse && (
               <Button 
@@ -218,15 +229,6 @@ const NoteEditor = ({ note, onSave, onDelete, onCancel, isLoading, onCitationCli
               </Button>
             )}
           </div>
-          <Button 
-            onClick={handleSave}
-            disabled={!title.trim() || !content.trim() || isLoading}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            <Save className="h-4 w-4 ml-2" />
-            {isLoading ? 'שומר...' : 'שמור הערה'}
-          </Button>
         </div>
       </div>
     </div>

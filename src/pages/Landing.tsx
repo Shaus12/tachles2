@@ -55,14 +55,14 @@ const FeatureCard = ({ icon: Icon, title, description, delay = 0 }) => (
 const StepCard = ({ number, title, description, delay = 0 }) => (
   <FadeIn delay={delay / 1000} direction="up" className="h-full">
     <motion.div 
-      className="bg-white/30 backdrop-blur-xl p-8 rounded-3xl border border-white/20 h-full text-center hover:bg-white/40 transition-all duration-300"
+      className="bg-white/90 backdrop-blur-xl p-8 rounded-3xl border border-white/50 h-full text-center hover:bg-white/95 transition-all duration-300 shadow-xl"
       whileHover={{ 
         scale: 1.03,
-        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)"
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
       }}
     >
       <motion.div 
-        className="w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-600 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-6 mx-auto"
+        className="w-16 h-16 bg-gradient-to-br from-purple-500 to-cyan-600 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-6 mx-auto shadow-lg"
         whileHover={{ scale: 1.1 }}
         animate={{ 
           scale: [1, 1.05, 1],
@@ -80,8 +80,8 @@ const StepCard = ({ number, title, description, delay = 0 }) => (
       >
         {number}
       </motion.div>
-      <h3 className="text-xl font-bold text-blue-900 mb-4">{title}</h3>
-      <p className="text-blue-800 leading-relaxed">{description}</p>
+      <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
+      <p className="text-gray-700 leading-relaxed">{description}</p>
     </motion.div>
   </FadeIn>
 );
@@ -103,6 +103,7 @@ const Landing = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const navigate = useNavigate();
+  const [imageExists, setImageExists] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -113,6 +114,16 @@ const Landing = () => {
     
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useEffect(() => {
+    const checkImage = () => {
+      const img = new Image();
+      img.onload = () => setImageExists(true);
+      img.onerror = () => setImageExists(false);
+      img.src = '/Screenshot 2025-07-06 120322.png';
+    };
+    checkImage();
   }, []);
 
   return (
@@ -292,43 +303,85 @@ const Landing = () => {
               </div>
               
               {/* Stats */}
-              <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}> 
-                <div className="text-center">
-                  <div className="mb-2">
-                    <TrendingUp className="w-8 h-8 text-blue-500 mx-auto animate-bounce" />
-                  </div>
-                  <div className="text-4xl font-bold text-blue-400 mb-2">
-                    <AnimatedCounter end={1000} />+
-                  </div>
-                  <div className="text-gray-400">סטודנטים מרוצים</div>
-                  <div className="mt-2 bg-gray-200 rounded-full h-2 mx-4">
-                    <div className="bg-blue-500 h-2 rounded-full animate-progress-fill"></div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="mb-2">
-                    <BookOpen className="w-8 h-8 text-purple-500 mx-auto animate-pulse" />
-                  </div>
-                  <div className="text-4xl font-bold text-purple-400 mb-2">
-                    <AnimatedCounter end={50} />+
-                  </div>
-                  <div className="text-gray-400">פורמטי תוכן</div>
-                  <div className="mt-2 bg-gray-200 rounded-full h-2 mx-4">
-                    <div className="bg-purple-500 h-2 rounded-full animate-progress-fill" style={{animationDelay: '0.5s'}}></div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="mb-2">
-                    <Award className="w-8 h-8 text-cyan-500 mx-auto animate-trophy-bounce" />
-                  </div>
-                  <div className="text-4xl font-bold text-cyan-400 mb-2">
-                    <AnimatedCounter end={95} />%
-                  </div>
-                  <div className="text-gray-400">שיפור ביעילות</div>
-                  <div className="mt-2 bg-gray-200 rounded-full h-2 mx-4">
-                    <div className="bg-cyan-500 h-2 rounded-full animate-progress-fill" style={{animationDelay: '1s'}}></div>
-                  </div>
-                </div>
+              <div className={`max-w-4xl mx-auto mt-20 transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}> 
+                <FadeIn delay={0.5} direction="up">
+                  <motion.div 
+                    className="bg-white/20 backdrop-blur-xl rounded-3xl border border-white/30 overflow-hidden shadow-2xl"
+                    whileHover={{ 
+                      scale: 1.02,
+                      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    <div className="p-8">
+                      <div className="text-center mb-8">
+                        <motion.div 
+                          className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4"
+                          whileHover={{ rotate: 360 }}
+                          transition={{ duration: 0.8 }}
+                        >
+                          <Brain className="w-8 h-8 text-white" />
+                        </motion.div>
+                        <h3 className="text-2xl font-bold text-blue-900 mb-2">
+                          יד ביד איתך לאורך כל התואר
+                        </h3>
+                        <p className="text-lg text-blue-800 font-semibold">
+                          הפלטפורמה שתלווה אותך משלב הלמידה ועד לבחינה
+                        </p>
+                      </div>
+                      
+                      <div className="relative rounded-2xl overflow-hidden shadow-lg">
+                        {imageExists ? (
+                          <motion.img 
+                            src="/Screenshot 2025-07-06 120322.png"
+                            alt="יד ביד איתך לאורך כל התואר - הפלטפורמה שתלווה אותך משלב הלמידה ועד לבחינה"
+                            className="w-full h-auto object-contain bg-white rounded-xl"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8, duration: 0.8 }}
+                            whileHover={{ 
+                              scale: 1.05,
+                              boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+                            }}
+                          />
+                        ) : (
+                          <motion.div 
+                            className="aspect-video bg-gradient-to-br from-slate-900 to-slate-700 p-6 text-white font-mono text-sm leading-relaxed rounded-xl"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8, duration: 0.8 }}
+                            whileHover={{ 
+                              scale: 1.05,
+                              boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+                            }}
+                          >
+                            <div className="flex items-center justify-center h-full">
+                              <div className="text-center">
+                                <div className="text-4xl mb-4">📊</div>
+                                <div className="text-xl text-blue-300 font-bold mb-2">
+                                  יד ביד איתך לאורך כל התואר
+                                </div>
+                                <div className="text-purple-300 font-bold">
+                                  הפלטפורמה שתלווה אותך משלב הלמידה ועד לבחינה
+                                </div>
+                                <div className="text-cyan-300 text-sm mt-4">
+                                  למידה חכמה עם AI
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                        
+                        <motion.div 
+                          className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-xl"
+                          whileHover={{ opacity: 1 }}
+                        />
+                      </div>
+                      
+
+                    </div>
+                  </motion.div>
+                </FadeIn>
               </div>
             </div>
           </section>
@@ -387,13 +440,18 @@ const Landing = () => {
           </section>
 
           {/* How it works */}
-          <section className="py-20 px-4 bg-black/20 backdrop-blur-sm">
-            <div className="max-w-6xl mx-auto">
+          <section className="py-20 px-4 bg-gradient-to-br from-blue-50 via-purple-50 to-cyan-50 relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-100/10 to-purple-100/10 animate-gradient z-0"></div>
+            <div className="absolute top-10 left-10 w-32 h-32 bg-blue-200/15 rounded-full blur-2xl animate-float z-0"></div>
+            <div className="absolute bottom-10 right-10 w-24 h-24 bg-purple-200/15 rounded-full blur-2xl animate-float z-0" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-cyan-200/15 rounded-full blur-xl animate-float z-0" style={{ animationDelay: '1s' }}></div>
+            <div className="max-w-6xl mx-auto relative z-10">
               <div className="text-center mb-16">
                 <h2 className="text-5xl font-extrabold mb-6 bg-gradient-to-r from-purple-700 to-cyan-600 bg-clip-text text-transparent drop-shadow-lg">
                   איך זה עובד?
                 </h2>
-                <p className="text-xl font-semibold text-blue-900 drop-shadow">
+                <p className="text-xl font-semibold text-gray-700 drop-shadow">
                   <span className="font-extrabold text-purple-800">חמישה שלבים פשוטים</span> למהפכה בלמידה שלך
                 </p>
               </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { User, LogOut, ChevronRight, FileText } from 'lucide-react';
+import { User, LogOut, ChevronRight, FileText, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useNotebookUpdate } from '@/hooks/useNotebookUpdate';
 import { useIsDesktop } from '@/hooks/useIsDesktop';
@@ -19,9 +19,10 @@ interface NotebookHeaderProps {
   notebookId?: string;
   onSourcesClick?: () => void;
   sourcesCount?: number;
+  onProgressClick?: () => void;
 }
 
-const NotebookHeader = ({ title, notebookId, onSourcesClick, sourcesCount }: NotebookHeaderProps) => {
+const NotebookHeader = ({ title, notebookId, onSourcesClick, sourcesCount, onProgressClick }: NotebookHeaderProps) => {
   const navigate = useNavigate();
   const { logout } = useLogout();
   const [isEditing, setIsEditing] = useState(false);
@@ -98,6 +99,19 @@ const NotebookHeader = ({ title, notebookId, onSourcesClick, sourcesCount }: Not
         </div>
         
         <div className="flex items-center space-x-4">
+          {/* Progress button - only show on desktop */}
+          {isDesktop && onProgressClick && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onProgressClick}
+              className="flex items-center text-gray-600 hover:text-gray-900"
+            >
+              <TrendingUp className="h-4 w-4 ml-2" />
+              התקדמות
+            </Button>
+          )}
+          
           {/* Sources button - only show on desktop */}
           {isDesktop && onSourcesClick && (
             <Button 
