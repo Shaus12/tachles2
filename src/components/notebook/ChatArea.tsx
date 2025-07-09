@@ -173,7 +173,7 @@ const ChatArea = ({
   };
   
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden chat-area-ltr">
+    <div className="flex-1 flex flex-col h-full overflow-hidden">
       {hasSource ? (
         <div className="flex-1 flex flex-col h-full overflow-hidden">
           {/* Clean Chat Header */}
@@ -321,7 +321,7 @@ const ChatArea = ({
                     onKeyDown={e => e.key === 'Enter' && !isChatDisabled && !isSending && !pendingUserMessage && handleSendMessage()} 
                     className="pr-4 pl-16 py-3 rounded-xl border-gray-200 focus:border-blue-500 focus:ring-blue-500" 
                     disabled={isChatDisabled || isSending || !!pendingUserMessage}
-                    dir="rtl"
+                    dir="auto"
                   />
                   <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
                     {sourceCount} מקור{sourceCount !== 1 ? 'ות' : ''}

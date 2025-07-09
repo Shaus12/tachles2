@@ -141,51 +141,7 @@
     flex-direction: row;
   }
 
-  /* Chat area should be LTR for better reading flow */
-  .chat-area-ltr {
-    direction: ltr;
-    text-align: left;
-  }
 
-  .chat-area-ltr .space-x-2 > * + * {
-    margin-left: 0.5rem;
-    margin-right: 0;
-  }
-
-  .chat-area-ltr .space-x-3 > * + * {
-    margin-left: 0.75rem;
-    margin-right: 0;
-  }
-
-  .chat-area-ltr .space-x-4 > * + * {
-    margin-left: 1rem;
-    margin-right: 0;
-  }
-
-  .chat-area-ltr .ml-2 {
-    margin-left: 0.5rem;
-    margin-right: 0;
-  }
-
-  .chat-area-ltr .mr-2 {
-    margin-right: 0.5rem;
-    margin-left: 0;
-  }
-
-  .chat-area-ltr .pl-4 {
-    padding-left: 1rem;
-    padding-right: 0;
-  }
-
-  .chat-area-ltr .pr-4 {
-    padding-right: 1rem;
-    padding-left: 0;
-  }
-
-  .chat-area-ltr .pr-16 {
-    padding-right: 4rem;
-    padding-left: 0;
-  }
 
   /* Custom scrollbar styles */
   .scrollbar-thin {

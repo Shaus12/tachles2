@@ -14,7 +14,7 @@ const MarkdownRenderer = ({ content, className = '', onCitationClick, isUserMess
   // Handle enhanced content with citations
   if (typeof content === 'object' && 'segments' in content) {
     return (
-      <div className={className}>
+      <div className={className} dir="auto">
         {processMarkdownWithCitations(content.segments, content.citations, onCitationClick, isUserMessage)}
       </div>
     );
@@ -25,7 +25,7 @@ const MarkdownRenderer = ({ content, className = '', onCitationClick, isUserMess
   const citations: Citation[] = [];
   
   return (
-    <div className={className}>
+    <div className={className} dir="auto">
       {processMarkdownWithCitations(segments, citations, onCitationClick, isUserMessage)}
     </div>
   );
@@ -41,9 +41,9 @@ const processMarkdownWithCitations = (
   // For user messages, render as inline content without paragraph breaks
   if (isUserMessage) {
     return (
-      <span>
+      <span dir="auto">
         {segments.map((segment, index) => (
-          <span key={index}>
+          <span key={index} dir="auto">
             {processInlineMarkdown(segment.text)}
             {segment.citation_id && onCitationClick && (
               <CitationButton
@@ -79,7 +79,7 @@ const processMarkdownWithCitations = (
       const processedContent = processTextWithMarkdown(paragraphText.trim());
       
       paragraphs.push(
-        <p key={`${segmentIndex}-${paragraphIndex}`} className="mb-4 leading-relaxed">
+        <p key={`${segmentIndex}-${paragraphIndex}`} className="mb-4 leading-relaxed" dir="auto">
           {processedContent}
           {/* Add citation at the end of the paragraph if this is the last paragraph of the segment */}
           {paragraphIndex === paragraphTexts.length - 1 && citation && onCitationClick && (

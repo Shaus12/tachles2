@@ -1,0 +1,93 @@
+{
+  "dashboard": {
+    "title": "Welcome to TachlesAI",
+    "createFirst": "Create Your First Notebook",
+    "description": "TachlesAI is an AI-powered research and writing assistant that works best with the sources you upload",
+    "createNotebook": "Create Notebook",
+    "creating": "Creating...",
+    "createNew": "+ Create New",
+    "newest": "Newest",
+    "title_sort": "Title",
+    "sources": "Sources",
+    "logout": "Logout",
+    "loading": "Loading...",
+    "tryAgain": "Try Again",
+    "authError": "Authentication Error",
+    "notebooksError": "Error Loading Notebooks",
+    "loadingNotebooks": "Loading your notebooks..."
+  },
+  "sources": {
+    "pdf": "PDF Files",
+    "pdfDesc": "Upload research papers, reports, and documents",
+    "website": "Websites", 
+    "websiteDesc": "Add web pages and online articles as sources",
+    "audio": "Audio",
+    "audioDesc": "Include multimedia content in your research"
+  },
+  "progress": {
+    "title": "Progress Tracking",
+    "subtitle": "Your learning journey so far",
+    "totalSources": "Sources Studied",
+    "sourcesDesc": "From the material you uploaded",
+    "chatMessages": "AI Conversations",
+    "chatDesc": "Questions and answers", 
+    "notes": "Notes Written",
+    "notesDesc": "Notes and thoughts",
+    "quizzes": "Quizzes Completed",
+    "quizzesDesc": "% Success",
+    "studyGoal": "Goal: Study {{count}} sources",
+    "engagement": "Engagement Score: {{score}}%",
+    "studyTime": "Study Time: {{time}}",
+    "correctAnswers": "{{correct}}/{{total}} correct answers",
+    "progress": "Progress",
+    "milestones": "Milestones",
+    "achievementsDesc": "Your achievements so far",
+    "nextGoal": "Next Goal:",
+    "loadingProgress": "Loading progress data...",
+    "progressError": "Error loading progress data"
+  },
+  "milestones": {
+    "firstSteps": "First Steps",
+    "firstStepsDesc": "Upload first source",
+    "curious": "Curious Student", 
+    "curiousDesc": "Ask 5 questions",
+    "noteWriter": "Note Writer",
+    "noteWriterDesc": "Write 3 notes",
+    "quizLover": "Quiz Lover",
+    "quizLoverDesc": "Complete a quiz",
+    "genius": "Little Genius",
+    "geniusDesc": "Achieve 80% in quiz",
+    "studious": "Studious Learner",
+    "studiousDesc": "Study for a full hour",
+    "expert": "Expert",
+    "expertDesc": "Complete 50% of material",
+    "master": "Master",
+    "masterDesc": "Complete all material"
+  },
+  "encouragement": {
+    "start": "Let's start! There's interesting material to learn",
+    "goodStart": "Good start! Keep it up",
+    "onTrack": "Great! You're on the right track",
+    "halfway": "Awesome progress! Almost halfway there",
+    "almostDone": "Almost done! Just a little more to finish everything",
+    "completed": "Excellent! You've completed all the material! 🎉",
+    "remaining": "{{count}} sources remaining to study",
+    "allDone": "Congratulations on completing all the material!"
+  },
+  "recommendations": {
+    "title": "Today's Recommendation",
+    "askMore": "Try asking more questions to the virtual teacher",
+    "writeNotes": "Write more notes to remember better",
+    "takeQuiz": "Test yourself with a new quiz",
+    "improveQuiz": "Try to improve your quiz scores!",
+    "keepStudying": "Continue studying new sources",
+    "greatJob": "Great job! Keep it up 🌟"
+  },
+  "language": {
+    "title": "Language",
+    "hebrew": "עברית",
+    "english": "English",
+    "arabic": "العربية",
+    "russian": "Русский"
+  }
+} 
