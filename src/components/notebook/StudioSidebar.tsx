@@ -10,6 +10,7 @@ import { useSources } from '@/hooks/useSources';
 import { useQueryClient } from '@tanstack/react-query';
 import NoteEditor from './NoteEditor';
 import AudioPlayer from './AudioPlayer';
+import SimpleNoteDialog from './SimpleNoteDialog';
 import { Citation } from '@/types/message';
 
 interface StudioSidebarProps {
@@ -30,6 +31,7 @@ const StudioSidebar = ({
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isCreatingNote, setIsCreatingNote] = useState(false);
   const [audioError, setAudioError] = useState(false);
+  const [showNoteDialog, setShowNoteDialog] = useState(false);
   const {
     notes,
     isLoading,
@@ -84,8 +86,17 @@ const StudioSidebar = ({
   }, [notebookId, notebook?.audio_overview_url, notebook?.audio_url_expires_at, autoRefreshIfExpired, checkAudioExpiry]);
 
   const handleCreateNote = () => {
-    setIsCreatingNote(true);
-    setEditingNote(null);
+    console.log('StudioSidebar: Opening new note dialog');
+    setShowNoteDialog(true);
+  };
+
+  const handleSaveFromDialog = (title: string, content: string) => {
+    createNote({ 
+      title, 
+      content, 
+      source_type: 'user' 
+    });
+    setShowNoteDialog(false);
   };
 
   const handleEditNote = (note: Note) => {
@@ -317,9 +328,12 @@ const StudioSidebar = ({
     return (
       <div className="h-full flex flex-col overflow-hidden bg-white">
         <div className="p-4 border-b border-gray-100">
-          <Button variant="outline" size="sm" className="w-full" onClick={handleCreateNote}>
-            <Plus className="h-4 w-4 ml-2" />
-            הוסף הערה
+          <Button 
+            onClick={handleCreateNote}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md flex items-center justify-center space-x-2"
+          >
+            <Plus className="h-4 w-4" />
+            <span>הוספת הערה</span>
           </Button>
         </div>
 
@@ -373,6 +387,14 @@ const StudioSidebar = ({
             )}
           </div>
         </ScrollArea>
+
+        {/* Simple Note Dialog */}
+        <SimpleNoteDialog 
+          open={showNoteDialog}
+          onClose={() => setShowNoteDialog(false)}
+          onSave={handleSaveFromDialog}
+          isLoading={isCreating}
+        />
       </div>
     );
   }

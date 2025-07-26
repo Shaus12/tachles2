@@ -120,7 +120,7 @@ const Notebook = () => {
           {/* Left Side - Podcast (top) + Notes (bottom) */}
           <div className="w-[480px] bg-white border-r border-gray-200 flex flex-col">
             {/* Podcast (AudioPlayer) */}
-            <div className="h-1/2 min-h-[240px] max-h-[320px] border-b border-gray-100 flex-shrink-0 flex flex-col justify-center p-4">
+            <div className="h-[250px] border-b border-gray-100 flex-shrink-0 flex flex-col justify-center p-3">
               <div className="flex items-center justify-between mb-2">
                 <button
                   className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-400 to-red-500 text-white font-bold rounded-full shadow hover:from-orange-500 hover:to-red-600 transition-all transform hover:scale-105"
@@ -150,7 +150,7 @@ const Notebook = () => {
               )}
             </div>
             {/* Notes Carousel */}
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 max-h-[450px] overflow-hidden">
               <NotesCarousel 
                 notes={notes || []}
                 isCreating={isCreating}

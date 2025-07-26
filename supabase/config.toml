@@ -11,6 +11,12 @@ enable_signup = true
 double_confirm_changes = true
 enable_confirmations = true
 
+[auth.external.google]
+enabled = true
+client_id = ""
+secret = ""
+redirect_uri = "http://localhost:54321/auth/v1/callback"
+
 [db]
 port = 54322
 shadow_port = 54320
